@@ -32,8 +32,11 @@
 
         <section class="features">
             <div class="glass-panel feature-card">
-                <div class="feature-image-container">
-                    <img src="../Resources/placeholder.png" alt="Detailed Battery Info" class="feature-image">
+                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-0">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-1">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-2">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-3">
                 </div>
                 <div class="feature-text">
                     <h2>Real-time Battery Stats</h2>
@@ -43,8 +46,11 @@
             </div>
 
             <div class="glass-panel feature-card reverse">
-                <div class="feature-image-container">
-                    <img src="../Resources/placeholder.png" alt="Battery History Graph" class="feature-image">
+                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-0">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-1">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-2">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-3">
                 </div>
                 <div class="feature-text">
                     <h2>Beautiful History Graphs</h2>
@@ -54,8 +60,11 @@
             </div>
 
             <div class="glass-panel feature-card">
-                <div class="feature-image-container">
-                    <img src="../Resources/placeholder.png" alt="Health and Cycle Count" class="feature-image">
+                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-0">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-1">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-2">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-3">
                 </div>
                 <div class="feature-text">
                     <h2>Deep Health Insights</h2>
@@ -65,8 +74,11 @@
             </div>
 
             <div class="glass-panel feature-card reverse">
-                <div class="feature-image-container">
-                    <img src="../Resources/placeholder.png" alt="Customization Settings" class="feature-image">
+                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-0">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-1">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-2">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-3">
                 </div>
                 <div class="feature-text">
                     <h2>Highly Customizable</h2>
@@ -83,6 +95,51 @@
 
     <script src="../particles.min.js"></script>
     <script src="../script.js"></script>
+    <script>
+        function cycleStack(container) {
+            if (container.dataset.animating === 'true') return;
+            container.dataset.animating = 'true';
+
+            const images = container.querySelectorAll('.feature-image');
+
+            let frontImg = null;
+            const currentPositions = [];
+            
+            images.forEach(img => {
+                const posClass = Array.from(img.classList).find(c => c.startsWith('stack-pos-'));
+                if (posClass) {
+                    const pos = parseInt(posClass.split('-')[2]);
+                    currentPositions.push({ img, pos, posClass });
+                    if (pos === 0) frontImg = { img, posClass };
+                }
+            });
+
+            const isReverse = container.closest('.feature-card').classList.contains('reverse');
+            const outClass = isReverse ? 'stack-out-right' : 'stack-out-left';
+
+            if (frontImg) {
+                frontImg.img.classList.remove(frontImg.posClass);
+                frontImg.img.classList.add(outClass);
+            }
+
+            currentPositions.forEach(item => {
+                if (item.pos > 0) {
+                    item.img.classList.remove(item.posClass);
+                    item.img.classList.add(`stack-pos-${item.pos - 1}`);
+                }
+            });
+
+            setTimeout(() => {
+                if (frontImg) {
+                    frontImg.img.classList.remove(outClass);
+                    frontImg.img.classList.add('stack-pos-3');
+                }
+                setTimeout(() => {
+                    container.dataset.animating = 'false';
+                }, 50);
+            }, 350); 
+        }
+    </script>
 </body>
 
 </html>
