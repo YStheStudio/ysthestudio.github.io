@@ -4,12 +4,15 @@
     --glass-shadow: rgba(0, 0, 0, 0.05);
     --text-primary: #1d1d1f;
     --text-secondary: #515154;
-    --accent: #65C466; /* Green from particles */
+    --accent: #65C466;
+    /* Green from particles */
     --accent-hover: #54a555;
 }
 
-body, html {
-    overflow-y: auto !important; /* override the overflow: hidden in root styles.css */
+body,
+html {
+    overflow-y: auto !important;
+    /* override the overflow: hidden in root styles.css */
     height: auto !important;
     min-height: 100vh;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -61,8 +64,8 @@ body, html {
     width: 128px;
     height: 128px;
     margin-bottom: 24px;
-    border-radius: 28px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-radius: 34px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .hero h1 {
@@ -146,7 +149,7 @@ body, html {
     max-width: 100%;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -187,6 +190,7 @@ footer {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -205,6 +209,7 @@ footer {
         opacity: 0;
         transform: translateY(50px) scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -212,13 +217,17 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .feature-card, .feature-card.reverse {
+
+    .feature-card,
+    .feature-card.reverse {
         flex-direction: column;
         text-align: center;
     }
+
     .hero h1 {
         font-size: 2.2rem;
     }
+
     .hero .tagline {
         font-size: 1.2rem;
     }
