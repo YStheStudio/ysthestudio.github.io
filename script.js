@@ -3,7 +3,7 @@ if (typeof particlesJS !== 'undefined') {
     particlesJS("particles-js", {
         "particles": {
             "number": {
-                "value": 80,
+                "value": 100,
                 "density": {
                     "enable": true,
                     "value_area": 800
@@ -96,3 +96,35 @@ if (typeof particlesJS !== 'undefined') {
         "retina_detect": true
     });
 }
+
+// Particles Parallax on Scroll
+let lastScrollY = window.scrollY;
+window.addEventListener("scroll", () => {
+    const currentScrollY = window.scrollY;
+    const deltaY = currentScrollY - lastScrollY;
+    lastScrollY = currentScrollY;
+
+    if (window.pJSDom && window.pJSDom.length > 0) {
+        const pJS = window.pJSDom[0].pJS;
+        pJS.particles.array.forEach(p => {
+            // Move particles slightly up as the user scrolls down for a distant background effect
+            p.y += deltaY * -0.25;
+        });
+    }
+});
+
+// Particle Amount Limiter
+const PARTICLE_LIMIT = 300;
+setInterval(() => {
+    if (window.pJSDom && window.pJSDom.length > 0) {
+        const pJS = window.pJSDom[0].pJS;
+        const currentCount = pJS.particles.array.length;
+        if (currentCount > PARTICLE_LIMIT) {
+            const excess = currentCount - PARTICLE_LIMIT;
+            for (let i = 0; i < excess; i++) {
+                const randomIndex = Math.floor(Math.random() * pJS.particles.array.length);
+                pJS.particles.array.splice(randomIndex, 1);
+            }
+        }
+    }
+}, 1000);
