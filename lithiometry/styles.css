@@ -269,14 +269,13 @@ footer {
     .feature-card.reverse {
         flex-direction: column;
         text-align: center;
-        gap: 80px;
     }
 
     .image-stack {
-        height: 100vw;
-        max-height: 450px;
-        min-height: 380px;
-        margin-bottom: 20px;
+        height: 50vw;
+        max-height: 300px;
+        min-height: 200px;
+        margin-bottom: 10px;
     }
 
     .hero h1 {
