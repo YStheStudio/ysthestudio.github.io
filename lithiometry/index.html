@@ -41,18 +41,29 @@
                             </div>
                             <div class="battery-tip"></div>
                             <div class="battery-text">42</div>
-                            <svg class="battery-bolt" viewBox="0 0 100 100"><path fill="currentColor" d="M60,0 L20,50 L45,50 L40,100 L80,50 L55,50 Z"></path></svg>
+                            <img src="../Resources/bolt.png" class="battery-bolt" alt="Charging Bolt">
                         </div>
+                        <div class="cc-wrapper">
+                            <img src="../Resources/control_center.png" id="demo-control-center" alt="Control Center">
+                            <div id="demo-cc-menu">
+                                <div class="cc-toggle">
+                                    <img src="../Resources/lowpower_off.png" class="cc-off" alt="Low Power Mode Off">
+                                    <img src="../Resources/lowpower_on.png" class="cc-on" alt="Low Power Mode On">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="demo-clock">Tue Jun 2 16:30</div>
                     </div>
                 </div>
-                
+
                 <!-- Keyboard and MagSafe -->
                 <div id="demo-desk">
                     <img src="../Resources/keyboard.png" alt="MacBook Keyboard" id="demo-keyboard">
                     <div id="demo-snap-zone"></div>
                     <div id="demo-magsafe" draggable="false">
                         <img src="../Resources/magsafe.png" class="magsafe-base" alt="MagSafe Cable" draggable="false">
-                        <img src="../Resources/magsafe_charging.png" class="magsafe-charging" alt="MagSafe Charging" draggable="false">
+                        <img src="../Resources/magsafe_charging.png" class="magsafe-charging" alt="MagSafe Charging"
+                            draggable="false">
                     </div>
                 </div>
             </div>
@@ -135,7 +146,7 @@
 
             let frontImg = null;
             const currentPositions = [];
-            
+
             images.forEach(img => {
                 const posClass = Array.from(img.classList).find(c => c.startsWith('stack-pos-'));
                 if (posClass) {
@@ -168,7 +179,7 @@
                 setTimeout(() => {
                     container.dataset.animating = 'false';
                 }, 50);
-            }, 350); 
+            }, 350);
         }
     </script>
 </body>

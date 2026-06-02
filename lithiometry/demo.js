@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = h;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h);
-            
+
             const extDiv = document.createElement('div');
             extDiv.className = `magsafe-cable-ext ${className}`;
             extDiv.style.backgroundImage = `url(${canvas.toDataURL()})`;
-            
+
             magsafe.prepend(extDiv);
         };
-        
+
         if (img.complete && img.naturalWidth > 0) {
             generate();
         } else {
@@ -102,13 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dx = e.clientX - startX;
         let intendedTranslateX = baseTranslateX + dx;
-        
+
         let snapTranslateX = portX + 5 - initialMagsafeTipX;
-        
+
         if (intendedTranslateX > snapTranslateX) {
             intendedTranslateX = snapTranslateX;
         }
-        
+
         const intendedTipX = initialMagsafeTipX + intendedTranslateX;
         const distance = Math.abs(portX - intendedTipX);
         const snapThreshold = window.innerWidth <= 768 ? 30 : 15; // Larger snap zone for touch screens
@@ -165,5 +165,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         window.requestAnimationFrame(step);
+    }
+
+    function updateClock() {
+        const clockEl = document.getElementById('demo-clock');
+        if (!clockEl) return;
+
+        const now = new Date();
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const dayName = days[now.getDay()];
+        const monthName = months[now.getMonth()];
+        const date = now.getDate();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        clockEl.textContent = `${dayName} ${monthName} ${date} ${hours}:${minutes}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Control Center Menu Toggle
+    const ccIcon = document.getElementById('demo-control-center');
+    const ccMenu = document.getElementById('demo-cc-menu');
+    const ccToggle = document.querySelector('.cc-toggle');
+
+    if (ccIcon && ccMenu && ccToggle) {
+        ccIcon.addEventListener('click', () => {
+            ccMenu.classList.toggle('visible');
+        });
+
+        ccToggle.addEventListener('click', () => {
+            ccToggle.classList.toggle('active');
+            const battery = document.getElementById('demo-battery');
+            if (battery) {
+                battery.classList.toggle('low-power');
+            }
+        });
+
+        // Hide menu if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!ccIcon.contains(e.target) && !ccMenu.contains(e.target)) {
+                ccMenu.classList.remove('visible');
+            }
+        });
     }
 });

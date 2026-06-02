@@ -331,11 +331,12 @@ footer {
 /* Menubar overlay */
 #demo-menubar {
     position: absolute;
-    top: 2%;
-    /* Roughly menubar height based on typical mac screen png */
-    right: 5%;
-    height: 4%;
-    /* Relative to screen height */
+    top: 12%;
+    right: 9%;
+    height: 6%;
+    width: 45%;
+    /* Provide intrinsic width for size container query and clock */
+    container-type: size;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -343,95 +344,216 @@ footer {
 
 /* Battery Icon CSS replicating swift logic */
 #demo-battery {
+    --h: 50cqh;
+    /* The base grid height from your container */
+    --body-w: calc(var(--h) * 23.5 / 13);
+
     position: relative;
-    width: 27px;
-    /* base width */
-    height: 13px;
+    width: calc(var(--h) * 27 / 13);
+    height: calc(var(--h) * 22 / 13);
     display: flex;
     align-items: center;
-    font-family: 'Inter', sans-serif;
-    transform-origin: right center;
-    transform: scale(2);
-    /* Scale up to be visible on desktop */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-@media (max-width: 768px) {
-    #demo-battery {
-        transform: scale(1.5);
-        /* slightly smaller on mobile */
-    }
-}
-
+/* The 23.5x13 Body */
 .battery-body {
     position: absolute;
-    right: 3px;
-    width: 24px;
-    height: 13px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: rgba(0, 0, 0, 0.2);
+    left: 0;
+    width: var(--body-w);
+    height: var(--h);
+    border-radius: calc(var(--h) * 4.5 / 13);
+    background: rgba(255, 255, 255, 0.5);
+    /* Base Knockout background */
     overflow: hidden;
-    display: flex;
-    align-items: center;
+    transition: background-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+/* The Fill */
 .battery-fill {
     height: 100%;
-    width: 42%;
-    /* Starting value */
     background: white;
-    border-radius: 2px;
-    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s ease;
+    width: 42%;
+    /* Controlled via JS */
+    min-width: 5%;
+    /* Prevent total disappearance > 0 */
+    transition: width 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+        background-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+/* The Tip (1pt gap, 1.5x4 tip) */
 .battery-tip {
     position: absolute;
-    right: 1px;
-    width: 2px;
-    height: 4px;
+    left: calc(var(--body-w) + calc(var(--h) * 1 / 13));
+    width: calc(var(--h) * 1.5 / 13);
+    height: calc(var(--h) * 4 / 13);
     background: rgba(255, 255, 255, 0.5);
-    border-radius: 0 2px 2px 0;
+    /* Matches body background */
+    border-radius: 0 calc(var(--h) * 2 / 13) calc(var(--h) * 2 / 13) 0;
+    transition: background-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+/* Text Layer */
 .battery-text {
     position: absolute;
-    right: 3px;
-    width: 24px;
+    left: 0;
+    width: var(--body-w);
     text-align: center;
-    font-size: 9px;
+    font-size: calc(var(--h) * 11 / 13);
     font-weight: 600;
-    line-height: 13px;
-    color: black;
+    line-height: var(--h);
+
+    /* Faked Knockout effect matching wallpaper color */
+    color: #447DB1;
+    mix-blend-mode: normal;
+
+    transform: translateX(calc(var(--h) * -0.25 / 13));
+    /* Unplugged offset */
+    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+        color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
     z-index: 2;
-    transition: color 0.3s ease;
 }
 
+/* Bolt Icon */
 .battery-bolt {
     position: absolute;
-    right: -10px;
-    width: 9px;
-    height: 9px;
-    color: white;
+    /* Aligned right of text center, accounting for swift boltX offset */
+    left: calc(50% + calc(var(--h) * 2.5 / 13));
+    height: calc(var(--h) * 11 / 13);
+    /* Matched to text font-size */
+    width: auto;
+    object-fit: contain;
     opacity: 0;
-    transform: translateX(-5px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    /* Native 2pt drop animation when disappearing */
+    transform: translateY(calc(var(--h) * 2 / 13));
+    transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+        transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
     z-index: 3;
 }
 
-/* Plugged in state */
+#demo-clock {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: calc(50cqh * 11 / 13);
+    font-weight: 500;
+    color: white;
+    margin-left: calc(50cqh * 12 / 13);
+    /* Space from battery */
+    white-space: nowrap;
+}
+
+/* --- STATE: Plugged In --- */
+#demo-battery.plugged-in .battery-body {
+    /* Blended 25% with black */
+    background: rgba(191, 191, 191, 0.5);
+}
+
 #demo-battery.plugged-in .battery-fill {
     width: 100%;
     background: #34c759;
-    /* macOS System Green */
+    /* System Green */
 }
 
 #demo-battery.plugged-in .battery-text {
     color: white;
+    mix-blend-mode: normal;
+    transform: translateX(calc(var(--h) * 1.5 / 13));
+    /* Plugged in offset */
 }
 
 #demo-battery.plugged-in .battery-bolt {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
+    /* Rises up to center */
+}
+
+/* --- STATE: Low Power Mode --- */
+#demo-battery.low-power:not(.plugged-in) .battery-body {
+    background: rgba(255, 255, 255, 0.62);
+}
+
+#demo-battery.low-power:not(.plugged-in) .battery-fill {
+    background: #FFCC00;
+}
+
+#demo-battery.low-power:not(.plugged-in) .battery-text {
+    color: black;
+    mix-blend-mode: normal;
+}
+
+.cc-wrapper {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#demo-control-center {
+    height: 50cqh;
+    width: auto;
+    object-fit: contain;
+    margin-left: calc(50cqh * 12 / 13);
+    /* Space from battery */
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+#demo-control-center:hover {
+    opacity: 0.8;
+}
+
+/* Control Center Menu */
+#demo-cc-menu {
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    width: calc(100cqh * 5);
+    /* 0.5x size relative to menubar height */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    z-index: 10;
+}
+
+#demo-cc-menu.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+.cc-toggle {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.cc-toggle img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.3s ease-out;
+    /* Optional slight scale down on click */
+    transform: scale(1);
+    transition: opacity 0.3s ease-out, transform 0.1s ease;
+}
+
+.cc-toggle:active img {
+    transform: scale(0.96);
+}
+
+.cc-on {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.cc-toggle.active .cc-on {
+    opacity: 1;
+}
+
+.cc-toggle.active .cc-off {
+    opacity: 0;
 }
 
 /* Keyboard and MagSafe Desk area */
@@ -539,11 +661,14 @@ footer {
 
 @media (max-width: 768px) {
     #demo-magsafe {
-        height: 45px; /* 1.5x of 30px */
+        height: 45px;
+        /* 1.5x of 30px */
     }
+
     #demo-screen {
         border-bottom-left-radius: 24px;
     }
+
     #demo-keyboard {
         position: absolute;
         left: 50%;
