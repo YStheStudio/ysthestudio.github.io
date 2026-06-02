@@ -298,7 +298,6 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 60px 0;
     padding: 60px 20px;
     position: relative;
     overflow: hidden;
@@ -317,15 +316,23 @@ footer {
     position: relative;
     width: 100%;
     max-width: 700px;
+    border-radius: 12px;
+    border-bottom-left-radius: 40px;
+    overflow: hidden;
+}
+
+#demo-screen-scaler {
+    width: 100%;
+    height: 100%;
+    /* Translate offsets hide 100px of the 2560x1600 original image (3.9% X, 6.25% Y) */
+    transform: scale(2) translate(3.90625%, -6.25%);
+    transform-origin: top right;
 }
 
 #demo-screen {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 12px;
-    border-bottom-left-radius: 40px;
-    /* Optional shadow: box-shadow: 0 10px 40px rgba(0,0,0,0.3); */
 }
 
 /* Menubar overlay */
@@ -373,11 +380,10 @@ footer {
 .battery-fill {
     height: 100%;
     background: white;
-    width: 42%;
     /* Controlled via JS */
     min-width: 5%;
     /* Prevent total disappearance > 0 */
-    transition: width 0.3s cubic-bezier(0.33, 1, 0.68, 1),
+    transition: width 0.1s linear,
         background-color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
@@ -396,6 +402,7 @@ footer {
 /* Text Layer */
 .battery-text {
     position: absolute;
+    top: 3.8px;
     left: 0;
     width: var(--body-w);
     text-align: center;
@@ -404,7 +411,7 @@ footer {
     line-height: var(--h);
 
     /* Faked Knockout effect matching wallpaper color */
-    color: #447DB1;
+    color: #3972a7;
     mix-blend-mode: normal;
 
     transform: translateX(calc(var(--h) * -0.25 / 13));
@@ -418,17 +425,38 @@ footer {
 .battery-bolt {
     position: absolute;
     /* Aligned right of text center, accounting for swift boltX offset */
-    left: calc(50% + calc(var(--h) * 2.5 / 13));
-    height: calc(var(--h) * 11 / 13);
+    left: calc(50% + calc(var(--h) * 3.5 / 13));
+    height: calc(var(--h) * 8 / 13);
     /* Matched to text font-size */
     width: auto;
     object-fit: contain;
+
+    /* Mask Hack for precise color control */
+    background-color: #3972a7;
+    -webkit-mask-image: url('../Resources/bolt.png');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('../Resources/bolt.png');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    object-position: -9999px -9999px;
+
     opacity: 0;
-    /* Native 2pt drop animation when disappearing */
-    transform: translateY(calc(var(--h) * 2 / 13));
-    transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1),
-        transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+    transform: scale(1.15);
+    transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1), transform 0.45s linear;
     z-index: 3;
+}
+
+#demo-battery.single-digit .battery-bolt {
+    /* Pulls bolt closer when there's only 1 digit of text */
+    left: calc(50% + calc(var(--h) * 1.0 / 13));
+}
+
+#demo-battery.ends-in-one .battery-bolt {
+    /* Nudges bolt 2px left to compensate for the narrower '1' glyph */
+    margin-left: -2px;
 }
 
 #demo-clock {
@@ -442,13 +470,13 @@ footer {
 }
 
 /* --- STATE: Plugged In --- */
-#demo-battery.plugged-in .battery-body {
+#demo-battery.plugged-in .battery-body,
+#demo-battery.plugged-in .battery-tip {
     /* Blended 25% with black */
     background: rgba(191, 191, 191, 0.5);
 }
 
 #demo-battery.plugged-in .battery-fill {
-    width: 100%;
     background: #34c759;
     /* System Green */
 }
@@ -456,32 +484,81 @@ footer {
 #demo-battery.plugged-in .battery-text {
     color: white;
     mix-blend-mode: normal;
-    transform: translateX(calc(var(--h) * 1.5 / 13));
+    transform: translateX(calc(var(--h) * -3.0 / 13));
     /* Plugged in offset */
 }
 
 #demo-battery.plugged-in .battery-bolt {
     opacity: 1;
-    transform: translateY(0);
-    /* Rises up to center */
+    transform: scale(1);
+    background-color: white;
 }
 
 /* --- STATE: Low Power Mode --- */
-#demo-battery.low-power:not(.plugged-in) .battery-body {
+#demo-battery.low-power .battery-body,
+#demo-battery.low-power .battery-tip {
     background: rgba(255, 255, 255, 0.62);
 }
 
-#demo-battery.low-power:not(.plugged-in) .battery-fill {
+#demo-battery.low-power .battery-fill {
     background: #FFCC00;
 }
 
-#demo-battery.low-power:not(.plugged-in) .battery-text {
+#demo-battery.low-power .battery-text {
     color: black;
     mix-blend-mode: normal;
 }
 
+#demo-battery.low-power .battery-bolt {
+    background-color: #000000;
+}
+
+/* --- STATE: Low Battery (<= 20%) --- */
+#demo-battery.low-battery:not(.low-power) .battery-body,
+#demo-battery.low-battery:not(.low-power) .battery-tip {
+    background: rgba(191, 191, 191, 0.5);
+    /* Same as Plugged In */
+}
+
+#demo-battery.low-battery:not(.low-power) .battery-fill {
+    background: #FF3B30;
+    /* macOS System Red */
+}
+
+#demo-battery.low-battery:not(.low-power) .battery-text {
+    color: white;
+    mix-blend-mode: normal;
+}
+
+/* --- STATE: Full (100%) --- */
+#demo-battery.full:not(.low-power):not(.plugged-in) .battery-tip {
+    background: white;
+}
+
+#demo-battery.full.plugged-in .battery-tip {
+    background: #34c759;
+}
+
+#demo-battery.full.plugged-in .battery-text {
+    transform: translateX(calc(var(--h) * -0.25 / 13));
+    /* Return to normal center */
+    transition: none;
+    /* Instantly snap */
+}
+
+#demo-battery.full.plugged-in .battery-bolt {
+    opacity: 0;
+    transform: scale(1.15);
+    background-color: #3972a7;
+    transition: none;
+    /* Instantly hide */
+}
+
+#demo-battery.full.low-power .battery-tip {
+    background: #FFCC00;
+}
+
 .cc-wrapper {
-    position: relative;
     height: 100%;
     display: flex;
     align-items: center;
@@ -505,25 +582,28 @@ footer {
 #demo-cc-menu {
     position: absolute;
     top: 150%;
-    left: 50%;
-    width: calc(100cqh * 5);
-    /* 0.5x size relative to menubar height */
+    right: 0;
+    left: auto;
+    width: auto;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateY(-10px);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     z-index: 10;
+    display: flex;
+    flex-direction: row;
+    gap: calc(100cqh * 0.5);
 }
 
 #demo-cc-menu.visible {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
 .cc-toggle {
     position: relative;
-    width: 100%;
+    width: calc(100cqh * 5);
     cursor: pointer;
 }
 
@@ -612,6 +692,21 @@ footer {
     backface-visibility: hidden;
 }
 
+#demo-usbc {
+    position: absolute;
+    right: 85%;
+    top: 75%;
+    margin-top: 10px;
+    height: 35px;
+    transform: translateY(-50%) translateX(-150vw);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    will-change: transform;
+}
+
+#demo-usbc img,
 #demo-magsafe img {
     height: 100%;
     width: auto;
@@ -622,19 +717,27 @@ footer {
     display: block;
 }
 
-.magsafe-charging {
+.magsafe-led {
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
-    transition: opacity 0.4s ease-out;
+    transition: opacity 0.5s ease-out;
 }
 
-#demo-magsafe.plugged-in .magsafe-charging {
+#demo-magsafe.plugged-in .magsafe-amber {
     opacity: 1;
 }
 
-.magsafe-cable-ext {
+#demo-magsafe.plugged-in.full-charge .magsafe-amber {
+    opacity: 0;
+}
+
+#demo-magsafe.plugged-in.full-charge .magsafe-green {
+    opacity: 1;
+}
+
+.cable-ext {
     position: absolute;
     right: 50%;
     /* Start exactly halfway from the right */

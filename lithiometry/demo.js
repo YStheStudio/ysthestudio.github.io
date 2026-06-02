@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const magsafeBaseImg = magsafe.querySelector('.magsafe-base');
     const magsafeChargingImg = magsafe.querySelector('.magsafe-charging');
 
-    function createCablePattern(img, className) {
-        if (!img) return;
+    function createCablePattern(img, parent, className) {
+        if (!img || !parent) return;
         const generate = () => {
             const canvas = document.createElement('canvas');
             // We only want the left half of the image
@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h);
 
             const extDiv = document.createElement('div');
-            extDiv.className = `magsafe-cable-ext ${className}`;
+            extDiv.className = `cable-ext ${className}`;
             extDiv.style.backgroundImage = `url(${canvas.toDataURL()})`;
 
-            magsafe.prepend(extDiv);
+            parent.prepend(extDiv);
         };
 
         if (img.complete && img.naturalWidth > 0) {
@@ -34,8 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    createCablePattern(magsafeBaseImg, 'base-ext');
-    createCablePattern(magsafeChargingImg, 'charging-ext');
+    createCablePattern(magsafeBaseImg, magsafe, 'base-ext');
+    createCablePattern(magsafeChargingImg, magsafe, 'charging-ext');
+
+    // Also extend the USB-C cable
+    const usbcContainer = document.getElementById('demo-usbc');
+    if (usbcContainer) {
+        const usbcBaseImg = usbcContainer.querySelector('.usbc-base');
+        createCablePattern(usbcBaseImg, usbcContainer, 'base-ext');
+    }
 
     let isDragging = false;
     let startX = 0;
@@ -137,35 +144,128 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPluggedIn === plugged) return;
         isPluggedIn = plugged;
         const battery = document.getElementById('demo-battery');
-        const batteryText = battery.querySelector('.battery-text');
 
         if (plugged) {
             battery.classList.add('plugged-in');
             magsafe.classList.add('plugged-in');
-            // Animate text from 42 to 100 quickly
-            animateValue(batteryText, 42, 100, 400);
+
+            // Auto-retract USB-C fail-safe if user plugs in MagSafe
+            if (isUsbcPlugged) {
+                isUsbcPlugged = false;
+                const usbc = document.getElementById('demo-usbc');
+                const container = document.getElementById('interactive-demo');
+                if (usbc && container) {
+                    const currentTransform = usbc.style.transform;
+                    usbc.style.transition = 'none';
+                    usbc.style.transform = 'translateY(-50%) translateX(0px)';
+                    const baseRight = usbc.getBoundingClientRect().right;
+                    const standbyX = container.getBoundingClientRect().left - baseRight;
+                    
+                    usbc.style.transform = currentTransform;
+                    usbc.getBoundingClientRect(); // force layout reflow
+                    
+                    usbc.style.transition = 'transform 0.3s ease-out';
+                    usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+                }
+            }
         } else {
             battery.classList.remove('plugged-in');
             magsafe.classList.remove('plugged-in');
-            // Reset text immediately
-            batteryText.innerText = '42';
         }
     }
 
-    function animateValue(obj, start, end, duration) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            obj.innerText = Math.floor(progress * (end - start) + start);
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                obj.innerText = end;
+    let batteryLevel = 100;
+    let lastBatteryTime = performance.now();
+    let isUsbcPlugged = false;
+
+    function updateBattery(timestamp) {
+        if (!lastBatteryTime) lastBatteryTime = timestamp;
+        const delta = timestamp - lastBatteryTime;
+        lastBatteryTime = timestamp;
+
+        const battery = document.getElementById('demo-battery');
+        const isLowPower = battery && battery.classList.contains('low-power');
+        const isHighPower = battery && battery.classList.contains('high-power');
+
+        if (isPluggedIn) {
+            batteryLevel += (25 * delta) / 1000; // Charge at 25% per second
+            if (batteryLevel > 100) batteryLevel = 100;
+        } else if (!isUsbcPlugged) {
+            let drainRate = 3;
+            if (isLowPower) drainRate = 1.5;
+            if (isHighPower) drainRate = 6;
+
+            batteryLevel -= (drainRate * delta) / 1000;
+
+            // Trigger USB-C fail-safe
+            if (batteryLevel <= 1) {
+                batteryLevel = 1;
+                isUsbcPlugged = true;
+                const battery = document.getElementById('demo-battery');
+                if (battery) battery.classList.add('plugged-in');
+
+                const usbc = document.getElementById('demo-usbc');
+                const keyboard = document.getElementById('demo-keyboard');
+                const container = document.getElementById('interactive-demo');
+                if (usbc && keyboard && container) {
+                    usbc.style.transition = 'none';
+                    usbc.style.transform = 'translateY(-50%) translateX(0px)';
+                    const baseRight = usbc.getBoundingClientRect().right;
+                    const portX = keyboard.getBoundingClientRect().left;
+                    const targetX = portX + 24 - baseRight;
+                    const standbyX = container.getBoundingClientRect().left - baseRight;
+
+                    usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+                    usbc.getBoundingClientRect(); // force reflow
+
+                    usbc.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+                    usbc.style.transform = `translateY(-50%) translateX(${targetX}px)`;
+                }
             }
-        };
-        window.requestAnimationFrame(step);
+        }
+
+        const batteryFill = document.querySelector('.battery-fill');
+        const batteryText = document.querySelector('.battery-text');
+
+        if (battery && batteryFill && batteryText) {
+            const currentLevel = Math.floor(batteryLevel);
+            batteryFill.style.width = `${batteryLevel}%`;
+            batteryText.innerText = currentLevel;
+
+            // Handle the narrower '1' glyph spacing
+            if (String(currentLevel).endsWith('1')) {
+                battery.classList.add('ends-in-one');
+            } else {
+                battery.classList.remove('ends-in-one');
+            }
+
+            if (batteryLevel <= 21) {
+                battery.classList.add('low-battery');
+            } else {
+                battery.classList.remove('low-battery');
+            }
+
+            const magsafeContainer = document.getElementById('demo-magsafe');
+
+            if (batteryLevel >= 100) {
+                battery.classList.add('full');
+                if (magsafeContainer) magsafeContainer.classList.add('full-charge');
+            } else {
+                battery.classList.remove('full');
+                if (magsafeContainer) magsafeContainer.classList.remove('full-charge');
+            }
+
+            if (batteryLevel < 10) {
+                battery.classList.add('single-digit');
+            } else {
+                battery.classList.remove('single-digit');
+            }
+        }
+
+        window.requestAnimationFrame(updateBattery);
     }
+
+    window.requestAnimationFrame(updateBattery);
 
     function updateClock() {
         const clockEl = document.getElementById('demo-clock');
@@ -190,18 +290,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Control Center Menu Toggle
     const ccIcon = document.getElementById('demo-control-center');
     const ccMenu = document.getElementById('demo-cc-menu');
-    const ccToggle = document.querySelector('.cc-toggle');
+    const ccLowPower = document.getElementById('cc-low-power');
+    const ccHighPower = document.getElementById('cc-high-power');
 
-    if (ccIcon && ccMenu && ccToggle) {
+    if (ccIcon && ccMenu && ccLowPower && ccHighPower) {
         ccIcon.addEventListener('click', () => {
             ccMenu.classList.toggle('visible');
         });
 
-        ccToggle.addEventListener('click', () => {
-            ccToggle.classList.toggle('active');
+        ccLowPower.addEventListener('click', () => {
             const battery = document.getElementById('demo-battery');
-            if (battery) {
-                battery.classList.toggle('low-power');
+            if (!battery) return;
+
+            const willBeActive = !ccLowPower.classList.contains('active');
+
+            if (willBeActive) {
+                ccLowPower.classList.add('active');
+                battery.classList.add('low-power');
+
+                ccHighPower.classList.remove('active');
+                battery.classList.remove('high-power');
+            } else {
+                ccLowPower.classList.remove('active');
+                battery.classList.remove('low-power');
+            }
+        });
+
+        ccHighPower.addEventListener('click', () => {
+            const battery = document.getElementById('demo-battery');
+            if (!battery) return;
+
+            const willBeActive = !ccHighPower.classList.contains('active');
+
+            if (willBeActive) {
+                ccHighPower.classList.add('active');
+                battery.classList.add('high-power');
+
+                ccLowPower.classList.remove('active');
+                battery.classList.remove('low-power');
+            } else {
+                ccHighPower.classList.remove('active');
+                battery.classList.remove('high-power');
             }
         });
 
@@ -212,4 +341,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Set initial USB-C standby position flush with left container edge
+    const initUsbc = () => {
+        const usbc = document.getElementById('demo-usbc');
+        const container = document.getElementById('interactive-demo');
+        if (usbc && container) {
+            usbc.style.transition = 'none';
+            usbc.style.transform = 'translateY(-50%) translateX(0px)';
+            const baseRight = usbc.getBoundingClientRect().right;
+            const standbyX = container.getBoundingClientRect().left - baseRight;
+            usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+        }
+    };
+    initUsbc();
 });

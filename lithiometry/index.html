@@ -23,8 +23,6 @@
             <img src="../Resources/lithiometry_icon_default.png" alt="Lithiometry Icon" class="app-icon">
             <h1>Lithiometry</h1>
             <p class="tagline">Advanced Battery Monitor for macOS</p>
-            <p class="description">Track your battery health, view detailed statistics, and visualize historical data
-                directly from your menu bar.</p>
             <a href="testflight/" class="download-btn">Join TestFlight Beta</a>
             <a href="privacy/" class="privacy-link">Privacy Policy</a>
         </header>
@@ -33,26 +31,35 @@
             <div class="demo-container">
                 <!-- Screen and UI -->
                 <div id="demo-screen-container">
-                    <img src="../Resources/screen.png" alt="MacBook Screen" id="demo-screen">
-                    <div id="demo-menubar">
-                        <div id="demo-battery">
-                            <div class="battery-body">
-                                <div class="battery-fill"></div>
+                    <div id="demo-screen-scaler">
+                        <img src="../Resources/screen.png" alt="MacBook Screen" id="demo-screen">
+                        <div id="demo-menubar">
+                            <div id="demo-battery">
+                                <div class="battery-body">
+                                    <div class="battery-fill"></div>
+                                </div>
+                                <div class="battery-tip"></div>
+                                <div class="battery-text">42</div>
+                                <img src="../Resources/bolt.png" class="battery-bolt" alt="Charging Bolt">
                             </div>
-                            <div class="battery-tip"></div>
-                            <div class="battery-text">42</div>
-                            <img src="../Resources/bolt.png" class="battery-bolt" alt="Charging Bolt">
-                        </div>
-                        <div class="cc-wrapper">
-                            <img src="../Resources/control_center.png" id="demo-control-center" alt="Control Center">
-                            <div id="demo-cc-menu">
-                                <div class="cc-toggle">
-                                    <img src="../Resources/lowpower_off.png" class="cc-off" alt="Low Power Mode Off">
-                                    <img src="../Resources/lowpower_on.png" class="cc-on" alt="Low Power Mode On">
+                            <div class="cc-wrapper">
+                                <img src="../Resources/control_center.png" id="demo-control-center"
+                                    alt="Control Center">
+                                <div id="demo-cc-menu">
+                                    <div class="cc-toggle" id="cc-low-power">
+                                        <img src="../Resources/lowpower_off.png" class="cc-off"
+                                            alt="Low Power Mode Off">
+                                        <img src="../Resources/lowpower_on.png" class="cc-on" alt="Low Power Mode On">
+                                    </div>
+                                    <div class="cc-toggle" id="cc-high-power">
+                                        <img src="../Resources/highpower_off.png" class="cc-off"
+                                            alt="High Power Mode Off">
+                                        <img src="../Resources/highpower_on.png" class="cc-on" alt="High Power Mode On">
+                                    </div>
                                 </div>
                             </div>
+                            <div id="demo-clock">Tue Jun 2 16:30</div>
                         </div>
-                        <div id="demo-clock">Tue Jun 2 16:30</div>
                     </div>
                 </div>
 
@@ -62,8 +69,11 @@
                     <div id="demo-snap-zone"></div>
                     <div id="demo-magsafe" draggable="false">
                         <img src="../Resources/magsafe.png" class="magsafe-base" alt="MagSafe Cable" draggable="false">
-                        <img src="../Resources/magsafe_charging.png" class="magsafe-charging" alt="MagSafe Charging"
-                            draggable="false">
+                        <img src="../Resources/magsafe_charging.png" class="magsafe-led magsafe-amber" alt="MagSafe Charging" draggable="false">
+                        <img src="../Resources/magsafe_charged.png" class="magsafe-led magsafe-green" alt="MagSafe Charged" draggable="false">
+                    </div>
+                    <div id="demo-usbc" draggable="false">
+                        <img src="../Resources/usbc_cable.png" class="usbc-base" alt="USB-C Cable" draggable="false">
                     </div>
                 </div>
             </div>
