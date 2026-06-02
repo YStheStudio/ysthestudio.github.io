@@ -545,6 +545,11 @@ footer {
         border-bottom-left-radius: 24px;
     }
     #demo-keyboard {
+        position: absolute;
+        left: 50%;
+        margin-right: 0;
+        max-width: none;
+        object-position: left center;
         border-bottom-right-radius: 24px;
     }
 }
