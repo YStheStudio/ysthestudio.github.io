@@ -402,7 +402,7 @@ footer {
 /* Text Layer */
 .battery-text {
     position: absolute;
-    top: 3.8px;
+    top: 50%;
     left: 0;
     width: var(--body-w);
     text-align: center;
@@ -414,7 +414,7 @@ footer {
     color: #3972a7;
     mix-blend-mode: normal;
 
-    transform: translateX(calc(var(--h) * -0.25 / 13));
+    transform: translateY(-55%) translateX(calc(var(--h) * -0.25 / 13));
     /* Unplugged offset */
     transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
         color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
@@ -484,7 +484,7 @@ footer {
 #demo-battery.plugged-in .battery-text {
     color: white;
     mix-blend-mode: normal;
-    transform: translateX(calc(var(--h) * -3.0 / 13));
+    transform: translateY(-55%) translateX(calc(var(--h) * -3.0 / 13));
     /* Plugged in offset */
 }
 
@@ -540,7 +540,7 @@ footer {
 }
 
 #demo-battery.full.plugged-in .battery-text {
-    transform: translateX(calc(var(--h) * -0.25 / 13));
+    transform: translateY(-55%) translateX(calc(var(--h) * -0.25 / 13));
     /* Return to normal center */
     transition: none;
     /* Instantly snap */
