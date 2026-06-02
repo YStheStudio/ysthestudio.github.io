@@ -292,3 +292,289 @@ footer {
         font-size: 1.2rem;
     }
 }
+
+/* Interactive Demo Scene */
+#interactive-demo {
+    margin: 60px 0;
+    padding: 60px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (orientation: portrait) {
+    #interactive-demo {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.demo-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+@media (orientation: portrait) {
+    .demo-container {
+        min-width: 800px; /* Prevent scaling down in portrait */
+        padding: 0 20px;
+    }
+}
+
+#demo-screen-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+}
+
+#demo-screen {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    border-bottom-left-radius: 40px;
+    /* Optional shadow: box-shadow: 0 10px 40px rgba(0,0,0,0.3); */
+}
+
+/* Menubar overlay */
+#demo-menubar {
+    position: absolute;
+    top: 2%;
+    /* Roughly menubar height based on typical mac screen png */
+    right: 5%;
+    height: 4%;
+    /* Relative to screen height */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Battery Icon CSS replicating swift logic */
+#demo-battery {
+    position: relative;
+    width: 27px;
+    /* base width */
+    height: 13px;
+    display: flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    transform-origin: right center;
+    transform: scale(2);
+    /* Scale up to be visible on desktop */
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    #demo-battery {
+        transform: scale(1.5);
+        /* slightly smaller on mobile */
+    }
+}
+
+.battery-body {
+    position: absolute;
+    right: 3px;
+    width: 24px;
+    height: 13px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.battery-fill {
+    height: 100%;
+    width: 42%;
+    /* Starting value */
+    background: white;
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.4s ease;
+}
+
+.battery-tip {
+    position: absolute;
+    right: 1px;
+    width: 2px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0 2px 2px 0;
+}
+
+.battery-text {
+    position: absolute;
+    right: 3px;
+    width: 24px;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 13px;
+    color: black;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.battery-bolt {
+    position: absolute;
+    right: -10px;
+    width: 9px;
+    height: 9px;
+    color: white;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 3;
+}
+
+/* Plugged in state */
+#demo-battery.plugged-in .battery-fill {
+    width: 100%;
+    background: #34c759;
+    /* macOS System Green */
+}
+
+#demo-battery.plugged-in .battery-text {
+    color: white;
+}
+
+#demo-battery.plugged-in .battery-bolt {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Keyboard and MagSafe Desk area */
+#demo-desk {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    /* match screen container max-width */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    height: 180px;
+    /* fixed height for dragging context */
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    #demo-desk {
+        height: 120px;
+    }
+}
+
+#demo-keyboard {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    margin-right: 10%;
+    /* push slightly left from right edge */
+    border-bottom-right-radius: 30px;
+}
+
+#demo-magsafe {
+    position: absolute;
+    right: 85%;
+    /* Anchor by right edge */
+    top: 50%;
+    height: 60px;
+    /* 1.5x of 40px */
+    width: auto;
+    transform: translateY(-50%) translateX(0);
+    cursor: grab;
+    z-index: 1;
+    user-select: none;
+    filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.3));
+    transition: transform 0.1s ease-out;
+    /* smooth follow */
+    touch-action: none;
+
+    /* Hardware acceleration to stabilize drop-shadow during drag */
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+#demo-magsafe img {
+    height: 100%;
+    width: auto;
+    pointer-events: none;
+}
+
+.magsafe-base {
+    display: block;
+}
+
+.magsafe-charging {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+#demo-magsafe.plugged-in .magsafe-charging {
+    opacity: 1;
+}
+
+.magsafe-cable-ext {
+    position: absolute;
+    right: 50%;
+    /* Start exactly halfway from the right */
+    top: 0;
+    height: 100%;
+    width: 3000px;
+    /* Arbitrarily long to extend offscreen */
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    /* Scale height perfectly to match the image */
+    background-position: right top;
+    /* Seamlessly align the right edge */
+    pointer-events: none;
+}
+
+.charging-ext {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+#demo-magsafe.plugged-in .charging-ext {
+    opacity: 1;
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    #demo-magsafe {
+        height: 45px;
+        /* 1.5x of 30px */
+    }
+}
+
+#demo-magsafe.dragging {
+    cursor: grabbing;
+    transition: none;
+    /* instant follow when dragging */
+}
+
+#demo-magsafe.animating {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.demo-instructions {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    pointer-events: none;
+}

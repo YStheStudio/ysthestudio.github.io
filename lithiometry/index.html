@@ -29,6 +29,37 @@
             <a href="privacy/" class="privacy-link">Privacy Policy</a>
         </header>
 
+        <section id="interactive-demo" class="glass-panel">
+            <div class="demo-container">
+                <!-- Screen and UI -->
+                <div id="demo-screen-container">
+                    <img src="../Resources/screen.png" alt="MacBook Screen" id="demo-screen">
+                    <div id="demo-menubar">
+                        <div id="demo-battery">
+                            <div class="battery-body">
+                                <div class="battery-fill"></div>
+                            </div>
+                            <div class="battery-tip"></div>
+                            <div class="battery-text">42</div>
+                            <svg class="battery-bolt" viewBox="0 0 100 100"><path fill="currentColor" d="M60,0 L20,50 L45,50 L40,100 L80,50 L55,50 Z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Keyboard and MagSafe -->
+                <div id="demo-desk">
+                    <img src="../Resources/keyboard.png" alt="MacBook Keyboard" id="demo-keyboard">
+                    <div id="demo-snap-zone"></div>
+                    <div id="demo-magsafe" draggable="false">
+                        <img src="../Resources/magsafe.png" class="magsafe-base" alt="MagSafe Cable" draggable="false">
+                        <img src="../Resources/magsafe_charging.png" class="magsafe-charging" alt="MagSafe Charging" draggable="false">
+                    </div>
+                </div>
+            </div>
+            <div class="demo-instructions">Drag the MagSafe to plug it in</div>
+        </section>
+
+
         <section class="features">
             <div class="glass-panel feature-card">
                 <div class="feature-image-container image-stack" onclick="cycleStack(this)">
@@ -94,6 +125,7 @@
 
     <script src="../particles.min.js"></script>
     <script src="../script.js"></script>
+    <script src="demo.js"></script>
     <script>
         function cycleStack(container) {
             if (container.dataset.animating === 'true') return;
