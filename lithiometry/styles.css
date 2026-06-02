@@ -295,37 +295,22 @@ footer {
 
 /* Interactive Demo Scene */
 #interactive-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 60px 0;
     padding: 60px 20px;
     position: relative;
     overflow: hidden;
 }
 
-@media (orientation: portrait) {
-    #interactive-demo {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
 .demo-container {
     width: 100%;
     max-width: 900px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-}
-
-@media (orientation: portrait) {
-    .demo-container {
-        min-width: 800px; /* Prevent scaling down in portrait */
-        padding: 0 20px;
-    }
 }
 
 #demo-screen-container {
@@ -370,7 +355,7 @@ footer {
     /* Scale up to be visible on desktop */
 }
 
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 768px) {
     #demo-battery {
         transform: scale(1.5);
         /* slightly smaller on mobile */
@@ -463,7 +448,7 @@ footer {
     /* fixed height for dragging context */
 }
 
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 768px) {
     #demo-desk {
         height: 120px;
     }
@@ -552,10 +537,15 @@ footer {
     opacity: 1;
 }
 
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 768px) {
     #demo-magsafe {
-        height: 45px;
-        /* 1.5x of 30px */
+        height: 45px; /* 1.5x of 30px */
+    }
+    #demo-screen {
+        border-bottom-left-radius: 24px;
+    }
+    #demo-keyboard {
+        border-bottom-right-radius: 24px;
     }
 }
 

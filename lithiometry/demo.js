@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const intendedTipX = initialMagsafeTipX + intendedTranslateX;
         const distance = Math.abs(portX - intendedTipX);
-        const snapThreshold = 10; // Magnetic pull distance
+        const snapThreshold = window.innerWidth <= 768 ? 30 : 15; // Larger snap zone for touch screens
 
         if (distance < snapThreshold && intendedTipX < portX + 40) {
             // Magnetically snap!
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    magsafe.addEventListener('pointerup', (e) => {
+    const endDrag = (e) => {
         if (!isDragging) return;
         isDragging = false;
         magsafe.classList.remove('dragging');
@@ -102,16 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dx = e.clientX - startX;
         let intendedTranslateX = baseTranslateX + dx;
-
+        
         let snapTranslateX = portX + 5 - initialMagsafeTipX;
-
+        
         if (intendedTranslateX > snapTranslateX) {
             intendedTranslateX = snapTranslateX;
         }
-
+        
         const intendedTipX = initialMagsafeTipX + intendedTranslateX;
         const distance = Math.abs(portX - intendedTipX);
-        const snapThreshold = 10;
+        const snapThreshold = window.innerWidth <= 768 ? 30 : 15; // Larger snap zone for touch screens
 
         if (distance < snapThreshold && intendedTipX < portX + 40) {
             // Keep it snapped
@@ -125,8 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setPluggedIn(false);
         }
 
-        magsafe.releasePointerCapture(e.pointerId);
-    });
+        if (e.pointerId) {
+            magsafe.releasePointerCapture(e.pointerId);
+        }
+    };
+
+    magsafe.addEventListener('pointerup', endDrag);
+    magsafe.addEventListener('pointercancel', endDrag);
 
     function setPluggedIn(plugged) {
         if (isPluggedIn === plugged) return;
