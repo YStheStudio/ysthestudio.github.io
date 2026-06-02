@@ -342,17 +342,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Set initial USB-C standby position flush with left container edge
-    const initUsbc = () => {
+    // Dynamically update both cable positions to handle screen resizing/rotation
+    const updateCablePositions = () => {
         const usbc = document.getElementById('demo-usbc');
+        const magsafe = document.getElementById('demo-magsafe');
         const container = document.getElementById('interactive-demo');
-        if (usbc && container) {
+        const keyboard = document.getElementById('demo-keyboard');
+        
+        if (usbc && magsafe && container && keyboard) {
+            const currentUsbcTransition = usbc.style.transition;
+            const currentMagsafeTransition = magsafe.style.transition;
+            
             usbc.style.transition = 'none';
+            magsafe.style.transition = 'none';
+            
+            // Re-calculate USB-C metrics
             usbc.style.transform = 'translateY(-50%) translateX(0px)';
-            const baseRight = usbc.getBoundingClientRect().right;
-            const standbyX = container.getBoundingClientRect().left - baseRight;
-            usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+            const usbcBaseRight = usbc.getBoundingClientRect().right;
+            const standbyX = container.getBoundingClientRect().left - usbcBaseRight;
+            
+            const currentPortX = keyboard.getBoundingClientRect().left;
+            const targetUsbcX = currentPortX + 24 - usbcBaseRight;
+            
+            if (isUsbcPlugged) {
+                usbc.style.transform = `translateY(-50%) translateX(${targetUsbcX}px)`;
+            } else {
+                usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+            }
+            
+            // Re-calculate MagSafe metrics
+            if (isPluggedIn) {
+                magsafe.style.transform = 'translateY(-50%) translateX(0px)';
+                const newInitialMagsafeTipX = magsafe.getBoundingClientRect().right;
+                const newSnapTranslateX = currentPortX + 5 - newInitialMagsafeTipX;
+                
+                // Update persistent drag state variables
+                baseTranslateX = newSnapTranslateX;
+                initialMagsafeTipX = newInitialMagsafeTipX;
+                portX = currentPortX;
+                
+                magsafe.style.transform = `translateY(-50%) translateX(${baseTranslateX}px)`;
+            } else if (!isDragging) {
+                baseTranslateX = 0;
+                magsafe.style.transform = 'translateY(-50%) translateX(0px)';
+            }
+            
+            usbc.getBoundingClientRect(); // force layout calculation
+            magsafe.getBoundingClientRect();
+            
+            usbc.style.transition = currentUsbcTransition;
+            magsafe.style.transition = currentMagsafeTransition;
         }
     };
-    initUsbc();
+    
+    updateCablePositions();
+    window.addEventListener('resize', updateCablePositions);
 });
