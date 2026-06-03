@@ -382,7 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Re-calculate USB-C metrics
             usbc.style.transform = 'translateY(-50%) translateX(0px)';
             const usbcBaseRight = usbc.getBoundingClientRect().right;
-            const standbyX = container.getBoundingClientRect().left - usbcBaseRight;
             
             const keyboardRect = keyboard.getBoundingClientRect();
             const currentPortX = keyboardRect.left;
@@ -392,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isUsbcPlugged) {
                 usbc.style.transform = `translateY(-50%) translateX(${targetUsbcX}px)`;
             } else {
-                usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+                usbc.style.transform = `translateY(-50%) translateX(0px)`;
             }
             
             // Re-calculate MagSafe metrics
