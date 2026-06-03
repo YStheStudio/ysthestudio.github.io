@@ -392,6 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
             magsafe.style.transition = 'none';
             
             const deskRect = desk.getBoundingClientRect();
+            if (deskRect.width === 0) return; // Prevent 0px math before DOM layout finishes rendering
+
             // mathematically calc 0px coordinate using the CSS rule `right: 200%` inside 33.33% desk
             const baseRightX = deskRect.right - (2 * deskRect.width);
             
