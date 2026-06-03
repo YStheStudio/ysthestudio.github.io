@@ -657,10 +657,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-    #demo-desk {
-        bottom: -15px;
-        right: -10px;
-    }
+    /* Mobile-specific adjustments can go here */
 }
 
 #demo-keyboard {
