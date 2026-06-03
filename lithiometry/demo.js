@@ -435,4 +435,5 @@ document.addEventListener('DOMContentLoaded', () => {
     
     updateCablePositions();
     window.addEventListener('resize', updateCablePositions);
+    window.addEventListener('load', updateCablePositions);
 });
