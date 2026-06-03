@@ -189,7 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLowPower = battery && battery.classList.contains('low-power');
         const isHighPower = battery && battery.classList.contains('high-power');
 
-        if (isPluggedIn || isUsbcPlugged) {
+        const desk = document.getElementById('demo-desk');
+        const isDeskHidden = desk && window.getComputedStyle(desk).display === 'none';
+
+        if (isPluggedIn || (isUsbcPlugged && isDeskHidden)) {
             // Gradiently slow down charging speed from 80% to 100%
             let chargeRate = 25; // Base 25% per second
             if (batteryLevel >= 80) {
@@ -219,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-        } else {
+        } else if (!isUsbcPlugged) {
             let drainRate = 3;
             if (isLowPower) drainRate = 1.5;
             if (isHighPower) drainRate = 6;
@@ -233,24 +236,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 const battery = document.getElementById('demo-battery');
                 if (battery) battery.classList.add('plugged-in');
 
-                const usbc = document.getElementById('demo-usbc');
-                const keyboard = document.getElementById('demo-keyboard');
-                const container = document.getElementById('interactive-demo');
-                if (usbc && keyboard && container) {
-                    usbc.style.transition = 'none';
-                    usbc.style.transform = 'translateY(-50%) translateX(0px)';
-                    const baseRight = usbc.getBoundingClientRect().right;
-                    const keyboardRect = keyboard.getBoundingClientRect();
-                    const portX = keyboardRect.left;
-                    const scale = keyboardRect.height / 180;
-                    const targetX = portX + (24 * scale) - baseRight;
-                    const standbyX = container.getBoundingClientRect().left - baseRight;
+                if (!isDeskHidden) {
+                    const usbc = document.getElementById('demo-usbc');
+                    const keyboard = document.getElementById('demo-keyboard');
+                    const container = document.getElementById('interactive-demo');
+                    if (usbc && keyboard && container) {
+                        usbc.style.transition = 'none';
+                        usbc.style.transform = 'translateY(-50%) translateX(0px)';
+                        const baseRight = usbc.getBoundingClientRect().right;
+                        const keyboardRect = keyboard.getBoundingClientRect();
+                        const portX = keyboardRect.left;
+                        const scale = keyboardRect.height / 180;
+                        const targetX = portX + (24 * scale) - baseRight;
+                        const standbyX = container.getBoundingClientRect().left - baseRight;
 
-                    usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
-                    usbc.getBoundingClientRect(); // force reflow
+                        usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+                        usbc.getBoundingClientRect(); // force reflow
 
-                    usbc.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
-                    usbc.style.transform = `translateY(-50%) translateX(${targetX}px)`;
+                        usbc.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+                        usbc.style.transform = `translateY(-50%) translateX(${targetX}px)`;
+                    }
                 }
             }
         }
