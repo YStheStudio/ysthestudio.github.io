@@ -79,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
             intendedTranslateX = -50;
         }
 
-        let snapTranslateX = portX + 6 - initialMagsafeTipX;
+        const scale = keyboard.getBoundingClientRect().height / 180;
+        let snapTranslateX = portX + (6 * scale) - initialMagsafeTipX;
 
         // Prevent dragging too far right (into the keyboard)
         if (intendedTranslateX > snapTranslateX) {
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const distance = Math.abs(portX - intendedTipX);
         const snapThreshold = window.innerWidth <= 768 ? 30 : 15; // Larger snap zone for touch screens
 
-        if (distance < snapThreshold && intendedTipX < portX + 40) {
+        if (distance < snapThreshold && intendedTipX < portX + (40 * scale)) {
             // Magnetically snap!
             magsafe.style.transform = `translateY(-50%) translateX(${snapTranslateX}px)`;
             if (!isPluggedIn) setPluggedIn(true);
@@ -110,7 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const dx = e.clientX - startX;
         let intendedTranslateX = baseTranslateX + dx;
 
-        let snapTranslateX = portX + 5 - initialMagsafeTipX;
+        const scale = keyboard.getBoundingClientRect().height / 180;
+        let snapTranslateX = portX + (5 * scale) - initialMagsafeTipX;
 
         if (intendedTranslateX > snapTranslateX) {
             intendedTranslateX = snapTranslateX;
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const distance = Math.abs(portX - intendedTipX);
         const snapThreshold = window.innerWidth <= 768 ? 30 : 15; // Larger snap zone for touch screens
 
-        if (distance < snapThreshold && intendedTipX < portX + 40) {
+        if (distance < snapThreshold && intendedTipX < portX + (40 * scale)) {
             // Keep it snapped
             baseTranslateX = snapTranslateX;
             magsafe.style.transform = `translateY(-50%) translateX(${baseTranslateX}px)`;
@@ -219,8 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     usbc.style.transition = 'none';
                     usbc.style.transform = 'translateY(-50%) translateX(0px)';
                     const baseRight = usbc.getBoundingClientRect().right;
-                    const portX = keyboard.getBoundingClientRect().left;
-                    const targetX = portX + 24 - baseRight;
+                    const keyboardRect = keyboard.getBoundingClientRect();
+                    const portX = keyboardRect.left;
+                    const scale = keyboardRect.height / 180;
+                    const targetX = portX + (24 * scale) - baseRight;
                     const standbyX = container.getBoundingClientRect().left - baseRight;
 
                     usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
@@ -369,8 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const usbcBaseRight = usbc.getBoundingClientRect().right;
             const standbyX = container.getBoundingClientRect().left - usbcBaseRight;
             
-            const currentPortX = keyboard.getBoundingClientRect().left;
-            const targetUsbcX = currentPortX + 24 - usbcBaseRight;
+            const keyboardRect = keyboard.getBoundingClientRect();
+            const currentPortX = keyboardRect.left;
+            const scale = keyboardRect.height / 180;
+            const targetUsbcX = currentPortX + (24 * scale) - usbcBaseRight;
             
             if (isUsbcPlugged) {
                 usbc.style.transform = `translateY(-50%) translateX(${targetUsbcX}px)`;
@@ -382,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isPluggedIn) {
                 magsafe.style.transform = 'translateY(-50%) translateX(0px)';
                 const newInitialMagsafeTipX = magsafe.getBoundingClientRect().right;
-                const newSnapTranslateX = currentPortX + 5 - newInitialMagsafeTipX;
+                const newSnapTranslateX = currentPortX + (5 * scale) - newInitialMagsafeTipX;
                 
                 // Update persistent drag state variables
                 baseTranslateX = newSnapTranslateX;
