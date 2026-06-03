@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLowPower = battery && battery.classList.contains('low-power');
         const isHighPower = battery && battery.classList.contains('high-power');
 
-        if (isPluggedIn) {
+        if (isPluggedIn || isUsbcPlugged) {
             // Gradiently slow down charging speed from 80% to 100%
             let chargeRate = 25; // Base 25% per second
             if (batteryLevel >= 80) {
@@ -199,8 +199,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             batteryLevel += (chargeRate * delta) / 1000;
-            if (batteryLevel > 100) batteryLevel = 100;
-        } else if (!isUsbcPlugged) {
+            
+            if (batteryLevel >= 100) {
+                batteryLevel = 100;
+                
+                // Auto-unplug the fail-safe USB-C when fully charged
+                if (isUsbcPlugged && !isPluggedIn) {
+                    isUsbcPlugged = false;
+                    const battery = document.getElementById('demo-battery');
+                    if (battery) battery.classList.remove('plugged-in');
+                    
+                    const usbc = document.getElementById('demo-usbc');
+                    const container = document.getElementById('interactive-demo');
+                    if (usbc && container) {
+                        const baseRight = usbc.getBoundingClientRect().right;
+                        const standbyX = container.getBoundingClientRect().left - baseRight;
+                        usbc.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+                        usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
+                    }
+                }
+            }
+        } else {
             let drainRate = 3;
             if (isLowPower) drainRate = 1.5;
             if (isHighPower) drainRate = 6;
