@@ -369,7 +369,8 @@ footer {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-@media (max-width: 768px), (orientation: portrait) {
+@media (max-width: 768px),
+(orientation: portrait) {
     #demo-battery {
         --text-y-offset: var(--text-y-portrait);
     }
@@ -709,7 +710,7 @@ footer {
 
 #demo-usbc {
     position: absolute;
-    right: 350%;
+    right: 500%;
     top: 83%;
     height: 19.44%;
     transform: translateY(-50%) translateX(0);
