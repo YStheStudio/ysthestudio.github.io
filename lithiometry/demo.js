@@ -156,15 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 isUsbcPlugged = false;
                 const usbc = document.getElementById('demo-usbc');
                 const container = document.getElementById('interactive-demo');
-                if (usbc && container) {
-                    const currentTransform = usbc.style.transform;
-                    usbc.style.transition = 'none';
-                    usbc.style.transform = 'translateY(-50%) translateX(0px)';
-                    const baseRight = usbc.getBoundingClientRect().right;
+                const desk = document.getElementById('demo-desk');
+                if (usbc && container && desk) {
+                    const deskRect = desk.getBoundingClientRect();
+                    const baseRight = deskRect.right - (2 * deskRect.width);
                     const standbyX = container.getBoundingClientRect().left - baseRight;
-                    
-                    usbc.style.transform = currentTransform;
-                    usbc.getBoundingClientRect(); // force layout reflow
                     
                     usbc.style.transition = 'transform 0.3s ease-out';
                     usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
@@ -240,16 +236,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const usbc = document.getElementById('demo-usbc');
                     const keyboard = document.getElementById('demo-keyboard');
                     const container = document.getElementById('interactive-demo');
-                    if (usbc && keyboard && container) {
-                        usbc.style.transition = 'none';
-                        usbc.style.transform = 'translateY(-50%) translateX(0px)';
-                        const baseRight = usbc.getBoundingClientRect().right;
+                    const desk = document.getElementById('demo-desk');
+                    if (usbc && keyboard && container && desk) {
+                        const deskRect = desk.getBoundingClientRect();
+                        const baseRight = deskRect.right - (2 * deskRect.width);
                         const keyboardRect = keyboard.getBoundingClientRect();
                         const portX = keyboardRect.left;
                         const scale = keyboardRect.height / 180;
                         const targetX = portX + (24 * scale) - baseRight;
                         const standbyX = container.getBoundingClientRect().left - baseRight;
-
+                        
+                        // Teleport silently to standby instantly before animating in
+                        usbc.style.transition = 'none';
                         usbc.style.transform = `translateY(-50%) translateX(${standbyX}px)`;
                         usbc.getBoundingClientRect(); // force reflow
 
@@ -384,23 +382,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const magsafe = document.getElementById('demo-magsafe');
         const container = document.getElementById('interactive-demo');
         const keyboard = document.getElementById('demo-keyboard');
+        const desk = document.getElementById('demo-desk');
         
-        if (usbc && magsafe && container && keyboard) {
+        if (usbc && magsafe && container && keyboard && desk) {
             const currentUsbcTransition = usbc.style.transition;
             const currentMagsafeTransition = magsafe.style.transition;
             
             usbc.style.transition = 'none';
             magsafe.style.transition = 'none';
             
+            const deskRect = desk.getBoundingClientRect();
+            // mathematically calc 0px coordinate using the CSS rule `right: 200%` inside 33.33% desk
+            const baseRightX = deskRect.right - (2 * deskRect.width);
+            
             // Re-calculate USB-C metrics
-            usbc.style.transform = 'translateY(-50%) translateX(0px)';
-            const usbcBaseRight = usbc.getBoundingClientRect().right;
-            const standbyX = container.getBoundingClientRect().left - usbcBaseRight;
+            const standbyX = container.getBoundingClientRect().left - baseRightX;
             
             const keyboardRect = keyboard.getBoundingClientRect();
             const currentPortX = keyboardRect.left;
             const scale = keyboardRect.height / 180;
-            const targetUsbcX = currentPortX + (24 * scale) - usbcBaseRight;
+            const targetUsbcX = currentPortX + (24 * scale) - baseRightX;
             
             if (isUsbcPlugged) {
                 usbc.style.transform = `translateY(-50%) translateX(${targetUsbcX}px)`;
@@ -410,13 +411,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Re-calculate MagSafe metrics
             if (isPluggedIn) {
-                magsafe.style.transform = 'translateY(-50%) translateX(0px)';
-                const newInitialMagsafeTipX = magsafe.getBoundingClientRect().right;
-                const newSnapTranslateX = currentPortX + (5 * scale) - newInitialMagsafeTipX;
+                const newSnapTranslateX = currentPortX + (5 * scale) - baseRightX;
                 
                 // Update persistent drag state variables
                 baseTranslateX = newSnapTranslateX;
-                initialMagsafeTipX = newInitialMagsafeTipX;
+                initialMagsafeTipX = baseRightX;
                 portX = currentPortX;
                 
                 magsafe.style.transform = `translateY(-50%) translateX(${baseTranslateX}px)`;
