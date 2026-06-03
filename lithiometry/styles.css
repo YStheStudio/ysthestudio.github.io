@@ -660,7 +660,7 @@ footer {
     /* Mobile-specific adjustments can go here */
 }
 
-@media (orientation: portrait) {
+@media (max-width: 768px), (orientation: portrait) {
     #demo-desk,
     .demo-instructions {
         display: none !important;
