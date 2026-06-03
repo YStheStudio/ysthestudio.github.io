@@ -445,17 +445,17 @@ footer {
     /* Mask Hack for precise color control */
     background-color: #3972a7;
     -webkit-mask-image: url('../Resources/bolt.png');
-    -webkit-mask-size: contain;
+    -webkit-mask-size: auto 95%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     mask-image: url('../Resources/bolt.png');
-    mask-size: contain;
+    mask-size: auto 95%;
     mask-repeat: no-repeat;
     mask-position: center;
     object-position: -9999px -9999px;
 
     opacity: 0;
-    transform: scale(1.15);
+    transform: scale(1.2);
     transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1), transform 0.45s linear;
     z-index: 3;
 }
@@ -467,7 +467,7 @@ footer {
 
 #demo-battery.ends-in-one .battery-bolt {
     /* Nudges bolt left proportionally to compensate for the narrower '1' glyph */
-    margin-left: calc(var(--h) * -0.5 / 13);
+    margin-left: calc(var(--h) * -1.5 / 13);
 }
 
 #demo-clock {
@@ -501,7 +501,7 @@ footer {
 
 #demo-battery.plugged-in .battery-bolt {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1.05);
     background-color: white;
 }
 

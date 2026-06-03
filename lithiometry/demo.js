@@ -188,7 +188,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const isHighPower = battery && battery.classList.contains('high-power');
 
         if (isPluggedIn) {
-            batteryLevel += (25 * delta) / 1000; // Charge at 25% per second
+            // Gradiently slow down charging speed from 80% to 100%
+            let chargeRate = 25; // Base 25% per second
+            if (batteryLevel >= 80) {
+                // Taper off linearly down to a minimum of 1.5% per second to ensure it reaches 100
+                const distanceToFull = 100 - batteryLevel;
+                chargeRate = Math.max(1.5, 25 * (distanceToFull / 20));
+            }
+            
+            batteryLevel += (chargeRate * delta) / 1000;
             if (batteryLevel > 100) batteryLevel = 100;
         } else if (!isUsbcPlugged) {
             let drainRate = 3;
