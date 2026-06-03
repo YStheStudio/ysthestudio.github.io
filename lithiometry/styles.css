@@ -712,7 +712,7 @@ footer {
     right: 200%;
     top: 83%;
     height: 19.44%;
-    transform: translateY(-50%) translateX(-150vw);
+    transform: translateY(-50%) translateX(0);
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     z-index: 0;
     pointer-events: none;
