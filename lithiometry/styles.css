@@ -128,15 +128,99 @@ html {
     gap: 40px;
 }
 
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+.lightbox-nav:active {
+    transform: translateY(-50%) scale(0.95);
+}
+.feature-card.expanded .lightbox-nav {
+    opacity: 1;
+    pointer-events: auto;
+}
+.lightbox-prev {
+    left: 40px;
+}
+.lightbox-next {
+    right: 40px;
+}
+.lightbox-nav svg {
+    pointer-events: none;
+}
+
 .feature-card {
     display: flex;
     align-items: center;
     gap: 40px;
     padding: 40px;
+    position: relative;
+    --expand-x: 55%;
+    --expand-scale: 1.8;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+.feature-card.expanded::after {
+    opacity: 1;
+}
+
+.feature-card.expanded .image-stack {
+    z-index: 10;
+}
+
+.feature-card.expanded .image-stack .stack-pos-0 {
+    transform: translate(var(--expand-x), 0) scale(var(--expand-scale));
+    z-index: 20;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    cursor: zoom-out;
+}
+
+.feature-card.expanded .feature-text {
+    opacity: 0.2;
+    filter: blur(4px);
+}
+
+.feature-card .feature-text {
+    transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
 .feature-card.reverse {
     flex-direction: row-reverse;
+    --expand-x: -55%;
 }
 
 .image-stack {
@@ -206,6 +290,12 @@ html {
     transform: translateX(-120%) translateY(-20px) scale(0.9) rotate(-10deg);
     z-index: 5;
     opacity: 0.0;
+    pointer-events: none;
+}
+
+.stack-out-dynamic {
+    z-index: 5;
+    opacity: 0.0 !important;
     pointer-events: none;
 }
 
@@ -283,7 +373,12 @@ footer {
         flex-direction: column;
         text-align: center;
         gap: 20px;
+        --expand-x: 0%;
+        --expand-scale: 1.15;
     }
+
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
 
     .image-stack,
     .feature-text {

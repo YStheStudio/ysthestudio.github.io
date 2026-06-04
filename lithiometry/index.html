@@ -83,7 +83,13 @@
 
         <section class="features">
             <div class="glass-panel feature-card">
-                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                <div class="lightbox-nav lightbox-prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="lightbox-nav lightbox-next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="feature-image-container image-stack">
                     <img src="../Resources/lithiometry_showcase_1-1.png" alt="Showcase 1"
                         class="feature-image stack-pos-0">
                     <img src="../Resources/lithiometry_showcase_1-2.png" alt="Showcase 2"
@@ -101,7 +107,13 @@
             </div>
 
             <div class="glass-panel feature-card reverse">
-                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                <div class="lightbox-nav lightbox-prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="lightbox-nav lightbox-next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="feature-image-container image-stack">
                     <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-0">
                     <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-1">
                     <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-2">
@@ -115,7 +127,13 @@
             </div>
 
             <div class="glass-panel feature-card">
-                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                <div class="lightbox-nav lightbox-prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="lightbox-nav lightbox-next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="feature-image-container image-stack">
                     <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-0">
                     <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-1">
                     <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-2">
@@ -129,7 +147,13 @@
             </div>
 
             <div class="glass-panel feature-card reverse">
-                <div class="feature-image-container image-stack" onclick="cycleStack(this)">
+                <div class="lightbox-nav lightbox-prev">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="lightbox-nav lightbox-next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+                <div class="feature-image-container image-stack">
                     <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-0">
                     <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-1">
                     <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-2">
@@ -153,7 +177,7 @@
     <script src="../script.js"></script>
     <script src="demo.js"></script>
     <script>
-        function cycleStack(container) {
+        function cycleStack(container, forceDirection = null) {
             if (container.dataset.animating === 'true') return;
             container.dataset.animating = 'true';
 
@@ -172,24 +196,50 @@
             });
 
             const isReverse = container.closest('.feature-card').classList.contains('reverse');
-            const outClass = isReverse ? 'stack-out-right' : 'stack-out-left';
+            const outClass = forceDirection || (isReverse ? 'stack-out-right' : 'stack-out-left');
 
             if (frontImg) {
-                // 1. Create a ghost clone for the flick-out animation
+                // 1. Create a ghost clone for the flick-out animation (copies inline drag styles)
                 const clone = frontImg.img.cloneNode(true);
                 container.appendChild(clone);
                 
-                // Force layout so clone is positioned at pos 0
+                // Force layout so clone locks in its starting dragged position
                 clone.getBoundingClientRect();
                 
-                // Animate clone out
-                clone.classList.remove(frontImg.posClass);
-                clone.classList.add(outClass);
+                // Re-enable CSS transitions on clone
+                clone.style.transition = '';
+                
+                if (typeof forceDirection === 'number') {
+                    // Extract the exact absolute pixel position from the active CSS state
+                    let currentTx = 0;
+                    const computed = window.getComputedStyle(clone).transform;
+                    if (computed && computed !== 'none') {
+                        const vals = computed.split('(')[1].split(')')[0].split(',');
+                        currentTx = parseFloat(vals[4]);
+                    }
+
+                    // Dynamic trajectory! Force the travel distance to be exactly 500px from the starting point
+                    const targetX = currentTx + Math.sign(forceDirection) * 500;
+                    const targetRotate = forceDirection * 0.1 + Math.sign(forceDirection) * 20;
+                    clone.style.transform = `translateX(${targetX}px) translateY(-50px) scale(0.9) rotate(${targetRotate}deg)`;
+                    clone.classList.remove(frontImg.posClass);
+                    clone.classList.add('stack-out-dynamic');
+                } else {
+                    // Fallback to static CSS destination
+                    clone.style.transform = '';
+                    clone.classList.remove(frontImg.posClass);
+                    clone.classList.add(outClass);
+                }
                 
                 // Destroy clone after animation finishes
                 setTimeout(() => clone.remove(), 500);
 
-                // 2. Instantly teleport the REAL image to the back
+                // 2. Clear real image inline styles so it can teleport!
+                frontImg.img.style.transition = '';
+                frontImg.img.style.transform = '';
+                frontImg.img.style.opacity = '';
+
+                // Instantly teleport the REAL image to the back
                 frontImg.img.classList.remove(frontImg.posClass);
                 frontImg.img.classList.add('stack-in-back');
                 
@@ -212,6 +262,118 @@
                 container.dataset.animating = 'false';
             }, 500);
         }
+
+        // Add touch and mouse drag capabilities to all image stacks
+        document.querySelectorAll('.image-stack').forEach(stack => {
+            let isDragging = false;
+            let startX = 0;
+            let currentX = 0;
+            let topCard = null;
+
+            stack.addEventListener('pointerdown', (e) => {
+                // Ignore clicks if animating or if it's a right click
+                if (stack.dataset.animating === 'true' || e.button === 2) return;
+                
+                topCard = stack.querySelector('.stack-pos-0');
+                if (topCard) {
+                    isDragging = true;
+                    startX = e.clientX;
+                    currentX = startX; // Initialize currentX
+                    // Disable transform transitions for instant follow, but smoothly transition opacity in 0.2s
+                    topCard.style.transition = 'opacity 0.2s ease'; 
+                    stack.setPointerCapture(e.pointerId);
+                }
+            });
+
+            stack.addEventListener('pointermove', (e) => {
+                if (!isDragging || !topCard) return;
+                currentX = e.clientX;
+                const deltaX = currentX - startX;
+                const rotate = Math.max(-45, Math.min(45, deltaX * 0.05));
+                
+                // Fade to 80% opacity when dragged past a small center threshold
+                if (Math.abs(deltaX) > 20) {
+                    topCard.style.opacity = '0.8';
+                } else {
+                    topCard.style.opacity = '1';
+                }
+                
+                const card = stack.closest('.feature-card');
+                if (card && card.classList.contains('expanded')) {
+                    const style = getComputedStyle(card);
+                    const expandX = style.getPropertyValue('--expand-x').trim();
+                    const expandScale = style.getPropertyValue('--expand-scale').trim();
+                    // Apply deltaX seamlessly on top of the expanded CSS state
+                    topCard.style.transform = `translate(calc(${expandX} + ${deltaX}px), 0) scale(${expandScale}) rotate(${rotate}deg)`;
+                } else {
+                    // Normal drag state
+                    topCard.style.transform = `translateX(${deltaX}px) scale(1.02) rotate(${rotate}deg)`;
+                }
+            });
+
+            const handlePointerEnd = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                try {
+                    stack.releasePointerCapture(e.pointerId);
+                } catch(err) {} // Ignore if capture was already lost
+                
+                if (!topCard) return;
+                
+                const deltaX = currentX - startX;
+                
+                // If dragged more than 100px, trigger the cycle!
+                if (Math.abs(deltaX) > 100) {
+                    cycleStack(stack, deltaX);
+                } else {
+                    // Restore CSS transition engine and clear inline transforms for snap back
+                    topCard.style.transition = ''; 
+                    topCard.style.transform = ''; 
+                    topCard.style.opacity = '';
+                    
+                    if (Math.abs(deltaX) < 10) {
+                        // It was a tap/click! Toggle the expanded lightbox state
+                        const card = stack.closest('.feature-card');
+                        if (card) {
+                            if (!card.classList.contains('expanded')) {
+                                // Dynamically calculate the exact physical distance to the center of the card!
+                                const cardRect = card.getBoundingClientRect();
+                                const stackRect = stack.getBoundingClientRect();
+                                const cardCenter = cardRect.left + cardRect.width / 2;
+                                const stackCenter = stackRect.left + stackRect.width / 2;
+                                const offsetToCenter = cardCenter - stackCenter;
+                                
+                                card.style.setProperty('--expand-x', `${offsetToCenter}px`);
+                            }
+                            card.classList.toggle('expanded');
+                        }
+                    }
+                }
+                
+                topCard = null;
+            };
+
+            stack.addEventListener('pointerup', handlePointerEnd);
+            stack.addEventListener('pointercancel', handlePointerEnd);
+        });
+
+        // Setup lightbox navigation buttons
+        document.querySelectorAll('.lightbox-nav').forEach(btn => {
+            btn.addEventListener('pointerdown', e => e.stopPropagation());
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = btn.closest('.feature-card');
+                const stack = card.querySelector('.image-stack');
+                if (btn.classList.contains('lightbox-prev')) {
+                    // Simulate a fast swipe to the left
+                    cycleStack(stack, -150);
+                } else {
+                    // Simulate a fast swipe to the right
+                    cycleStack(stack, 150);
+                }
+            });
+        });
     </script>
 </body>
 
