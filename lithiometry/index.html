@@ -291,8 +291,8 @@
                 const deltaX = currentX - startX;
                 const rotate = Math.max(-45, Math.min(45, deltaX * 0.05));
                 
-                // Fade to 80% opacity when dragged past a small center threshold
-                if (Math.abs(deltaX) > 20) {
+                // Fade to 80% opacity to visually indicate that the flick threshold has been reached!
+                if (Math.abs(deltaX) > 100) {
                     topCard.style.opacity = '0.8';
                 } else {
                     topCard.style.opacity = '1';
@@ -302,9 +302,10 @@
                 if (card && card.classList.contains('expanded')) {
                     const style = getComputedStyle(card);
                     const expandX = style.getPropertyValue('--expand-x').trim();
+                    const expandY = style.getPropertyValue('--expand-y').trim() || '0px';
                     const expandScale = style.getPropertyValue('--expand-scale').trim();
                     // Apply deltaX seamlessly on top of the expanded CSS state
-                    topCard.style.transform = `translate(calc(${expandX} + ${deltaX}px), 0) scale(${expandScale}) rotate(${rotate}deg)`;
+                    topCard.style.transform = `translate(calc(${expandX} + ${deltaX}px), ${expandY}) scale(${expandScale}) rotate(${rotate}deg)`;
                 } else {
                     // Normal drag state
                     topCard.style.transform = `translateX(${deltaX}px) scale(1.02) rotate(${rotate}deg)`;
@@ -340,11 +341,17 @@
                                 // Dynamically calculate the exact physical distance to the center of the card!
                                 const cardRect = card.getBoundingClientRect();
                                 const stackRect = stack.getBoundingClientRect();
+                                
                                 const cardCenter = cardRect.left + cardRect.width / 2;
                                 const stackCenter = stackRect.left + stackRect.width / 2;
                                 const offsetToCenter = cardCenter - stackCenter;
                                 
+                                const cardCenterY = cardRect.top + cardRect.height / 2;
+                                const stackCenterY = stackRect.top + stackRect.height / 2;
+                                const offsetToCenterY = cardCenterY - stackCenterY;
+                                
                                 card.style.setProperty('--expand-x', `${offsetToCenter}px`);
+                                card.style.setProperty('--expand-y', `${offsetToCenterY}px`);
                             }
                             card.classList.toggle('expanded');
                         }
@@ -371,6 +378,28 @@
                 } else {
                     // Simulate a fast swipe to the right
                     cycleStack(stack, 150);
+                }
+            });
+        });
+
+        // Keep expanded images perfectly centered during device orientation changes
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.feature-card.expanded').forEach(card => {
+                const stack = card.querySelector('.image-stack');
+                if (stack) {
+                    const cardRect = card.getBoundingClientRect();
+                    const stackRect = stack.getBoundingClientRect();
+                    
+                    const cardCenter = cardRect.left + cardRect.width / 2;
+                    const stackCenter = stackRect.left + stackRect.width / 2;
+                    const offsetToCenter = cardCenter - stackCenter;
+                    
+                    const cardCenterY = cardRect.top + cardRect.height / 2;
+                    const stackCenterY = stackRect.top + stackRect.height / 2;
+                    const offsetToCenterY = cardCenterY - stackCenterY;
+                    
+                    card.style.setProperty('--expand-x', `${offsetToCenter}px`);
+                    card.style.setProperty('--expand-y', `${offsetToCenterY}px`);
                 }
             });
         });
