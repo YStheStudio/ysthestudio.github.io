@@ -218,8 +218,8 @@
                         currentTx = parseFloat(vals[4]);
                     }
 
-                    // Dynamic trajectory! Force the travel distance to be exactly 500px from the starting point
-                    const targetX = currentTx + Math.sign(forceDirection) * 500;
+                    // Dynamic trajectory! Force the travel distance to be exactly 50% of the screen width from the starting point
+                    const targetX = currentTx + Math.sign(forceDirection) * (window.innerWidth * 0.5);
                     const targetRotate = forceDirection * 0.1 + Math.sign(forceDirection) * 20;
                     clone.style.transform = `translateX(${targetX}px) translateY(-50px) scale(0.9) rotate(${targetRotate}deg)`;
                     clone.classList.remove(frontImg.posClass);
