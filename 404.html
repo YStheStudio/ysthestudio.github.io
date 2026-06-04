@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <!-- Use root CSS styles for particles -->
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .not-found-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 60px 80px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .error-message {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 40px 30px;
+                width: 85%;
+                box-sizing: border-box;
+            }
+
+            .error-code {
+                font-size: 80px;
+            }
+
+            .error-message {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- The particle background -->
+    <div id="particles-js"></div>
+
+    <div class="not-found-container">
+        <div class="glass-card">
+            <h1 class="error-code">404</h1>
+            <p id="error-text" class="error-message">Looks like you drifted into deep space.</p>
+            <a id="back-btn" href="/" class="back-button">Return to Base</a>
+        </div>
+    </div>
+
+    <!-- Load the particle scripts from root -->
+    <script src="/particles.min.js"></script>
+    <script src="/script.js"></script>
+
+    <!-- Randomize 404 message -->
+    <script>
+        const messages = [
+            "Looks like you drifted into deep space.",
+            "This page went out for coffee and never came back.",
+            "Congratulations, you've discovered the edge of the internet.",
+            "Even Google Maps can't find this page.",
+            "We looked everywhere, but this link has officially ghosted us.",
+            "You've stumbled into a digital black hole.",
+            "This page has evaporated into thin air.",
+            "Somewhere, a 404 error is very proud of itself right now.",
+            "Error 404: Page not found, but we did find some dust bunnies.",
+            "You took a wrong turn at Albuquerque.",
+            "This URL is currently living its best life in a parallel universe.",
+            "We told this page to stay put, but it just had to go exploring.",
+            "Ah, a classic case of a missing webpage.",
+            "You've reached the end of the line, please mind the gap.",
+            "This page is hiding from its responsibilities.",
+            "The bad news: this page doesn't exist. The good news: you're doing great.",
+            "It's not you, it's this link.",
+            "Looks like this page decided to delete itself from the narrative.",
+            "You've wandered into the digital wilderness without a compass.",
+            "This link is as real as a unicorn riding a skateboard.",
+            "This page is currently on a digital vacation.",
+            "We searched the mainframe, but came up empty-handed.",
+            "Error: Page successfully misplaced.",
+            "The server hamsters are taking a break.",
+            "You've successfully reached the void.",
+            "We sent a search party, but they got lost too.",
+            "This link is officially off the grid.",
+            "Looks like a typo sent you to the shadow realm.",
+            "This page has joined the witness protection program.",
+            "You just hit a glitch in the matrix.",
+            "This URL is currently floating in the digital abyss.",
+            "We turned over every rock, but this page is gone.",
+            "Looks like the internet swallowed this link whole.",
+            "This page is enjoying a permanent coffee break.",
+            "You've reached a dimension of missing content.",
+            "This link has successfully escaped our radar.",
+            "Error 404: The digital compass is spinning wildly.",
+            "You found a dead end on the information superhighway.",
+            "This page was abducted by digital aliens.",
+            "Looks like you slipped through a wormhole."
+        ];
+        document.getElementById('error-text').textContent = messages[Math.floor(Math.random() * messages.length)];
+
+        const buttonMessages = [
+            "Abort mission and retreat!",
+            "Take me back to civilization.",
+            "Reverse! Reverse!",
+            "Hit the eject button.",
+            "Rewind the tape.",
+            "Let's pretend this never happened.",
+            "Return to safety.",
+            "Back to the matrix.",
+            "Time travel to the previous page.",
+            "Panic button.",
+            "Get me out of here!",
+            "Escape this black hole.",
+            "Teleport back home.",
+            "Undo this mistake.",
+            "Backpedal furiously.",
+            "Return to reality.",
+            "Take a step back and breathe.",
+            "Go back to where the wifi works.",
+            "Let's start over.",
+            "Flee the scene.",
+            "Beam me up.",
+            "Return to known coordinates.",
+            "Initiate emergency jump.",
+            "Get back to solid ground.",
+            "Hit the reset switch.",
+            "Retreat to the home screen.",
+            "Evacuate the area.",
+            "Back to the drawing board.",
+            "Run away fast.",
+            "Let's try that again.",
+            "Engage warp drive home.",
+            "Return to the safe zone.",
+            "Bail out now.",
+            "Backtrack immediately.",
+            "Find a way out.",
+            "Head back to HQ.",
+            "Abandon ship.",
+            "Jump back to reality.",
+            "Seek shelter on the homepage.",
+            "Get me back on track."
+        ];
+        document.getElementById('back-btn').textContent = buttonMessages[Math.floor(Math.random() * buttonMessages.length)];
+    </script>
+</body>
+
+</html>
