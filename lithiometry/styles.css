@@ -149,6 +149,8 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .image-stack .feature-image {
@@ -159,6 +161,9 @@ html {
     border-radius: 12px;
     transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: center center;
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .stack-pos-0 {
@@ -193,15 +198,23 @@ html {
 .stack-out-right {
     transform: translateX(120%) translateY(-20px) scale(0.9) rotate(10deg);
     z-index: 5;
-    opacity: 0.3;
+    opacity: 0.0;
     pointer-events: none;
 }
 
 .stack-out-left {
     transform: translateX(-120%) translateY(-20px) scale(0.9) rotate(-10deg);
     z-index: 5;
-    opacity: 0.3;
+    opacity: 0.0;
     pointer-events: none;
+}
+
+.stack-in-back {
+    transform: translateY(-100px) scale(0.5);
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: none !important;
 }
 
 .image-stack:hover .stack-pos-0 {
@@ -320,6 +333,14 @@ footer {
     border-radius: 12px;
     border-bottom-left-radius: 40px;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#demo-screen-container img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #demo-screen-scaler {
@@ -338,6 +359,9 @@ footer {
 
 /* Menubar overlay */
 #demo-menubar {
+    --base-h: 50cqh;
+    --h: var(--js-h, var(--base-h));
+    
     position: absolute;
     top: 12%;
     right: 9%;
@@ -357,7 +381,6 @@ footer {
     --text-y-portrait: -50%;
     --text-y-offset: var(--text-y-landscape);
 
-    --h: 50cqh;
     /* The base grid height from your container */
     --body-w: calc(var(--h) * 23.5 / 13);
 
@@ -474,10 +497,10 @@ footer {
 
 #demo-clock {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: calc(50cqh * 11 / 13);
+    font-size: calc(var(--h) * 11 / 13);
     font-weight: 500;
     color: white;
-    margin-left: calc(50cqh * 12 / 13);
+    margin-left: calc(var(--h) * 12 / 13);
     /* Space from battery */
     white-space: nowrap;
 }
@@ -578,10 +601,10 @@ footer {
 }
 
 #demo-control-center {
-    height: 50cqh;
+    height: var(--h);
     width: auto;
     object-fit: contain;
-    margin-left: calc(50cqh * 12 / 13);
+    margin-left: calc(var(--h) * 12 / 13);
     /* Space from battery */
     cursor: pointer;
     transition: opacity 0.2s ease;
@@ -656,6 +679,14 @@ footer {
     right: 0;
     width: 33.33%;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.25));
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#demo-desk img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 @media (max-width: 768px) {
@@ -683,7 +714,6 @@ footer {
     display: block;
     user-select: none;
     pointer-events: none;
-    border-bottom-right-radius: 24px;
 }
 
 #demo-magsafe {

@@ -84,10 +84,14 @@
         <section class="features">
             <div class="glass-panel feature-card">
                 <div class="feature-image-container image-stack" onclick="cycleStack(this)">
-                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-0">
-                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-1">
-                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-2">
-                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-3">
+                    <img src="../Resources/lithiometry_showcase_1-1.png" alt="Showcase 1"
+                        class="feature-image stack-pos-0">
+                    <img src="../Resources/lithiometry_showcase_1-2.png" alt="Showcase 2"
+                        class="feature-image stack-pos-1">
+                    <img src="../Resources/lithiometry_showcase_1-3.png" alt="Showcase 3"
+                        class="feature-image stack-pos-2">
+                    <img src="../Resources/lithiometry_showcase_1-4.png" alt="Showcase 4"
+                        class="feature-image stack-pos-3">
                 </div>
                 <div class="feature-text">
                     <h2>Real-time Battery Stats</h2>
@@ -171,8 +175,30 @@
             const outClass = isReverse ? 'stack-out-right' : 'stack-out-left';
 
             if (frontImg) {
+                // 1. Create a ghost clone for the flick-out animation
+                const clone = frontImg.img.cloneNode(true);
+                container.appendChild(clone);
+                
+                // Force layout so clone is positioned at pos 0
+                clone.getBoundingClientRect();
+                
+                // Animate clone out
+                clone.classList.remove(frontImg.posClass);
+                clone.classList.add(outClass);
+                
+                // Destroy clone after animation finishes
+                setTimeout(() => clone.remove(), 500);
+
+                // 2. Instantly teleport the REAL image to the back
                 frontImg.img.classList.remove(frontImg.posClass);
-                frontImg.img.classList.add(outClass);
+                frontImg.img.classList.add('stack-in-back');
+                
+                // Force layout so teleport happens instantly
+                frontImg.img.getBoundingClientRect();
+                
+                // 3. Begin animating REAL image into position 3 simultaneously!
+                frontImg.img.classList.remove('stack-in-back');
+                frontImg.img.classList.add('stack-pos-3');
             }
 
             currentPositions.forEach(item => {
@@ -183,14 +209,8 @@
             });
 
             setTimeout(() => {
-                if (frontImg) {
-                    frontImg.img.classList.remove(outClass);
-                    frontImg.img.classList.add('stack-pos-3');
-                }
-                setTimeout(() => {
-                    container.dataset.animating = 'false';
-                }, 50);
-            }, 350);
+                container.dataset.animating = 'false';
+            }, 500);
         }
     </script>
 </body>

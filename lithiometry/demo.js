@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Fix Safari zoom font-scaling bug by continuously injecting absolute pixel height 
+    const menubar = document.getElementById('demo-menubar');
+    if (menubar) {
+        const ro = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                // Ensure it calculates perfectly based on the rendered layout box
+                menubar.style.setProperty('--js-h', `${entry.contentRect.height * 0.5}px`);
+            }
+        });
+        ro.observe(menubar);
+    }
+
     const keyboard = document.getElementById('demo-keyboard');
     const magsafe = document.getElementById('demo-magsafe');
 
