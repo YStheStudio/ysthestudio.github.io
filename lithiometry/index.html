@@ -5,6 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lithiometry - Advanced Battery Monitor</title>
+
+    <!-- Open Graph / Facebook / Slack -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ysthestudio.github.io/lithiometry/">
+    <meta property="og:title" content="Lithiometry - Advanced Battery Monitor">
+    <meta property="og:description"
+        content="Advanced Battery Monitor for macOS. Monitor your current capacity, wattage, and detailed adapter information at a glance.">
+    <!-- Replace this image URL with a nice 1200x630 banner-->
+    <meta property="og:image" content="https://ysthestudio.github.io/Resources/lithiometry_showcase_1-1.png">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ysthestudio.github.io/lithiometry/">
+    <meta name="twitter:title" content="Lithiometry - Advanced Battery Monitor">
+    <meta name="twitter:description"
+        content="Advanced Battery Monitor for macOS. Monitor your current capacity, wattage, and detailed adapter information at a glance.">
+    <meta name="twitter:image" content="https://ysthestudio.github.io/Resources/lithiometry_showcase_1-1.png">
+
     <!-- Root styles for particles -->
     <link rel="stylesheet" href="../styles.css">
     <!-- Lithiometry specific styles -->
@@ -96,14 +114,10 @@
                     </svg>
                 </div>
                 <div class="feature-image-container image-stack">
-                    <img src="../Resources/lithiometry_showcase_1-1.png" alt="Showcase 1"
-                        class="feature-image stack-pos-0">
-                    <img src="../Resources/lithiometry_showcase_1-2.png" alt="Showcase 2"
-                        class="feature-image stack-pos-1">
-                    <img src="../Resources/lithiometry_showcase_1-3.png" alt="Showcase 3"
-                        class="feature-image stack-pos-2">
-                    <img src="../Resources/lithiometry_showcase_1-4.png" alt="Showcase 4"
-                        class="feature-image stack-pos-3">
+                    <img src="../Resources/lithiometry_showcase_1-1.png" alt="Showcase 1" class="feature-image">
+                    <img src="../Resources/lithiometry_showcase_1-2.png" alt="Showcase 2" class="feature-image">
+                    <img src="../Resources/lithiometry_showcase_1-3.png" alt="Showcase 3" class="feature-image">
+                    <!-- <img src="../Resources/lithiometry_showcase_1-4.png" alt="Showcase 4" class="feature-image"> -->
                 </div>
                 <div class="feature-text">
                     <h2>Real-time Battery Stats</h2>
@@ -126,10 +140,10 @@
                     </svg>
                 </div>
                 <div class="feature-image-container image-stack">
-                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-0">
-                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-1">
-                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-2">
-                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-3">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image">
                 </div>
                 <div class="feature-text">
                     <h2>Beautiful History Graphs</h2>
@@ -152,10 +166,10 @@
                     </svg>
                 </div>
                 <div class="feature-image-container image-stack">
-                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-0">
-                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-1">
-                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-2">
-                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-3">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image">
                 </div>
                 <div class="feature-text">
                     <h2>Deep Health Insights</h2>
@@ -178,10 +192,10 @@
                     </svg>
                 </div>
                 <div class="feature-image-container image-stack">
-                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image stack-pos-0">
-                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image stack-pos-1">
-                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image stack-pos-2">
-                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image stack-pos-3">
+                    <img src="../Resources/placeholder4.png" alt="Showcase 4" class="feature-image">
+                    <img src="../Resources/placeholder1.png" alt="Showcase 1" class="feature-image">
+                    <img src="../Resources/placeholder2.png" alt="Showcase 2" class="feature-image">
+                    <img src="../Resources/placeholder3.png" alt="Showcase 3" class="feature-image">
                 </div>
                 <div class="feature-text">
                     <h2>Highly Customizable</h2>
@@ -201,30 +215,51 @@
     <script src="../script.js"></script>
     <script src="demo.js"></script>
     <script>
+        // Initialize image stacks to support any number of images
+        document.querySelectorAll('.image-stack').forEach(stack => {
+            const images = Array.from(stack.querySelectorAll('.feature-image'));
+            if (images.length === 0) return;
+
+            // If less than 4, duplicate the FULL set until we have at least 4
+            // This prevents duplicate adjacent images when rotating (e.g. A, B, C -> A, B, C, A, B, C)
+            if (images.length < 4) {
+                const multiplier = Math.ceil(4 / images.length);
+                for (let m = 1; m < multiplier; m++) {
+                    images.forEach(img => {
+                        const clone = img.cloneNode(true);
+                        stack.appendChild(clone);
+                    });
+                }
+            }
+
+            // Assign initial classes based on DOM order
+            const allImages = Array.from(stack.querySelectorAll('.feature-image'));
+            allImages.forEach((img, index) => {
+                img.className = img.className.replace(/stack-pos-\d/g, '').trim();
+                img.classList.remove('stack-in-back');
+
+                if (index < 4) {
+                    img.classList.add(`stack-pos-${index}`);
+                } else {
+                    img.classList.add('stack-in-back');
+                }
+            });
+        });
+
         function cycleStack(container, forceDirection = null) {
             if (container.dataset.animating === 'true') return;
             container.dataset.animating = 'true';
 
-            const images = container.querySelectorAll('.feature-image');
-
-            let frontImg = null;
-            const currentPositions = [];
-
-            images.forEach(img => {
-                const posClass = Array.from(img.classList).find(c => c.startsWith('stack-pos-'));
-                if (posClass) {
-                    const pos = parseInt(posClass.split('-')[2]);
-                    currentPositions.push({ img, pos, posClass });
-                    if (pos === 0) frontImg = { img, posClass };
-                }
-            });
+            const images = Array.from(container.querySelectorAll('.feature-image:not(.ghost-clone)'));
+            const frontImg = images[0];
 
             const isReverse = container.closest('.feature-card').classList.contains('reverse');
             const outClass = forceDirection || (isReverse ? 'stack-out-right' : 'stack-out-left');
 
             if (frontImg) {
                 // 1. Create a ghost clone for the flick-out animation (copies inline drag styles)
-                const clone = frontImg.img.cloneNode(true);
+                const clone = frontImg.cloneNode(true);
+                clone.classList.add('ghost-clone');
                 container.appendChild(clone);
 
                 // Force layout so clone locks in its starting dragged position
@@ -246,12 +281,12 @@
                     const targetX = currentTx + Math.sign(forceDirection) * (window.innerWidth * 0.5);
                     const targetRotate = forceDirection * 0.1 + Math.sign(forceDirection) * 20;
                     clone.style.transform = `translateX(${targetX}px) translateY(-50px) scale(0.9) rotate(${targetRotate}deg)`;
-                    clone.classList.remove(frontImg.posClass);
+                    clone.className = clone.className.replace(/stack-pos-\d/g, '').trim();
                     clone.classList.add('stack-out-dynamic');
                 } else {
                     // Fallback to static CSS destination
                     clone.style.transform = '';
-                    clone.classList.remove(frontImg.posClass);
+                    clone.className = clone.className.replace(/stack-pos-\d/g, '').trim();
                     clone.classList.add(outClass);
                 }
 
@@ -259,28 +294,31 @@
                 setTimeout(() => clone.remove(), 500);
 
                 // 2. Clear real image inline styles so it can teleport!
-                frontImg.img.style.transition = '';
-                frontImg.img.style.transform = '';
-                frontImg.img.style.opacity = '';
+                frontImg.style.transition = '';
+                frontImg.style.transform = '';
+                frontImg.style.opacity = '';
 
                 // Instantly teleport the REAL image to the back
-                frontImg.img.classList.remove(frontImg.posClass);
-                frontImg.img.classList.add('stack-in-back');
+                frontImg.className = 'feature-image stack-in-back';
+                container.appendChild(frontImg);
 
                 // Force layout so teleport happens instantly
-                frontImg.img.getBoundingClientRect();
+                frontImg.getBoundingClientRect();
 
-                // 3. Begin animating REAL image into position 3 simultaneously!
-                frontImg.img.classList.remove('stack-in-back');
-                frontImg.img.classList.add('stack-pos-3');
+                // 3. Begin animating REAL images into their new positions
+                const newImages = Array.from(container.querySelectorAll('.feature-image:not(.ghost-clone)'));
+                newImages.forEach((img, index) => {
+                    img.className = img.className.replace(/stack-pos-\d/g, '').replace('stack-in-back', '').trim();
+                    if (!img.classList.contains('feature-image')) {
+                        img.classList.add('feature-image');
+                    }
+                    if (index < 4) {
+                        img.classList.add(`stack-pos-${index}`);
+                    } else {
+                        img.classList.add('stack-in-back');
+                    }
+                });
             }
-
-            currentPositions.forEach(item => {
-                if (item.pos > 0) {
-                    item.img.classList.remove(item.posClass);
-                    item.img.classList.add(`stack-pos-${item.pos - 1}`);
-                }
-            });
 
             setTimeout(() => {
                 container.dataset.animating = 'false';
@@ -450,7 +488,7 @@
             if (e.target.closest('.lightbox-nav')) return;
 
             const expandedCard = document.querySelector('.feature-card.expanded');
-            
+
             // Minimize if they clicked the overlay OR background cards, but NEVER the main zoomed image
             if (expandedCard && e.target.closest('.feature-card.expanded')) {
                 if (!e.target.classList.contains('stack-pos-0') && !expandedCard.dataset.ignoreClick) {
