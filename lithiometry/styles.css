@@ -584,7 +584,7 @@ footer {
     object-position: -9999px -9999px;
 
     opacity: 0;
-    transform: scale(1.2);
+    transform: scale(1.2) translateY(-8.25%);
     transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1), transform 0.45s linear;
     z-index: 3;
 }
@@ -630,7 +630,7 @@ footer {
 
 #demo-battery.plugged-in .battery-bolt {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.05) translateY(-8.25%);
     background-color: white;
 }
 
