@@ -200,19 +200,28 @@ html {
     backdrop-filter: blur(5px);
 }
 
+.feature-card.expanded {
+    cursor: zoom-out;
+}
+
 .feature-card.expanded::after {
     opacity: 1;
 }
 
 .feature-card.expanded .image-stack {
     z-index: 10;
+    cursor: zoom-out;
 }
 
 .feature-card.expanded .image-stack .stack-pos-0 {
     transform: translate(var(--expand-x), var(--expand-y, 0px)) scale(var(--expand-scale));
     z-index: 20;
     box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
-    cursor: zoom-out;
+    cursor: grab;
+}
+
+.feature-card.expanded .image-stack.is-dragging .stack-pos-0 {
+    cursor: grabbing !important;
 }
 
 .feature-card.expanded .feature-text {

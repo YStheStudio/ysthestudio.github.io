@@ -298,13 +298,21 @@
                 // Ignore clicks if animating or if it's a right click
                 if (stack.dataset.animating === 'true' || e.button === 2) return;
 
+                const cardContainer = stack.closest('.feature-card');
+                if (cardContainer && cardContainer.classList.contains('expanded')) {
+                    // When expanded, strictly restrict dragging to the front card!
+                    if (!e.target.classList.contains('stack-pos-0')) {
+                        return;
+                    }
+                }
+
                 topCard = stack.querySelector('.stack-pos-0');
                 if (topCard) {
                     isDragging = true;
                     startX = e.clientX;
                     currentX = startX; // Initialize currentX
-                    // Disable transform transitions for instant follow, but smoothly transition opacity in 0.2s
                     topCard.style.transition = 'opacity 0.2s ease';
+                    stack.classList.add('is-dragging');
                     stack.setPointerCapture(e.pointerId);
                 }
             });
@@ -339,6 +347,7 @@
             const handlePointerEnd = (e) => {
                 if (!isDragging) return;
                 isDragging = false;
+                stack.classList.remove('is-dragging');
 
                 try {
                     stack.releasePointerCapture(e.pointerId);
@@ -351,6 +360,11 @@
                 // If dragged more than 100px, trigger the cycle!
                 if (Math.abs(deltaX) > 100) {
                     cycleStack(stack, deltaX);
+                    const card = stack.closest('.feature-card');
+                    if (card) {
+                        card.dataset.ignoreClick = 'true';
+                        setTimeout(() => delete card.dataset.ignoreClick, 50);
+                    }
                 } else {
                     // Restore CSS transition engine and clear inline transforms for snap back
                     topCard.style.transition = '';
@@ -376,8 +390,10 @@
 
                                 card.style.setProperty('--expand-x', `${offsetToCenter}px`);
                                 card.style.setProperty('--expand-y', `${offsetToCenterY}px`);
+                                card.classList.add('expanded');
+                                card.dataset.ignoreClick = 'true';
+                                setTimeout(() => delete card.dataset.ignoreClick, 50);
                             }
-                            card.classList.toggle('expanded');
                         }
                     }
                 }
@@ -426,6 +442,21 @@
                     card.style.setProperty('--expand-y', `${offsetToCenterY}px`);
                 }
             });
+        });
+
+        // Click outside to minimize
+        document.addEventListener('click', e => {
+            // Ignore clicks on lightbox navigation buttons
+            if (e.target.closest('.lightbox-nav')) return;
+
+            const expandedCard = document.querySelector('.feature-card.expanded');
+            
+            // Minimize if they clicked the overlay OR background cards, but NEVER the main zoomed image
+            if (expandedCard && e.target.closest('.feature-card.expanded')) {
+                if (!e.target.classList.contains('stack-pos-0') && !expandedCard.dataset.ignoreClick) {
+                    expandedCard.classList.remove('expanded');
+                }
+            }
         });
     </script>
 </body>
