@@ -61,7 +61,7 @@
             cursor: grab;
             will-change: transform, opacity;
         }
-        
+
         .glass-card.dragging {
             cursor: grabbing;
         }
@@ -208,7 +208,67 @@
             "The digital compass is spinning wildly.",
             "You found a dead end on the information superhighway.",
             "This page was abducted by digital aliens.",
-            "Looks like you slipped through a wormhole."
+            "Looks like you slipped through a wormhole.",
+            "This page must have missed the memo.",
+            "We looked high and low, but mostly low.",
+            "The pixels for this page haven't been painted yet.",
+            "This URL is playing an epic game of hide and seek.",
+            "You've discovered the bermuda triangle of the internet.",
+            "Looks like this link took a wrong turn at the router.",
+            "This page is currently exploring the deep web.",
+            "The server says 'no', but we say 'maybe later'.",
+            "This content was lost in transmission.",
+            "You've reached a 404 dead zone.",
+            "This page is on strike until morale improves.",
+            "The server dog ate your webpage.",
+            "We tripped over a wire and lost your link.",
+            "This URL was abducted by space pirates.",
+            "You've successfully hacked into... absolutely nothing.",
+            "Page is currently out searching for itself.",
+            "This page went searching for a better WiFi connection.",
+            "The pixels you requested have been delayed by heavy traffic.",
+            "You found a secret level! Unfortunately, it's totally empty.",
+            "This page left to join the digital circus.",
+            "Looks like somebody forgot to pay the internet bill.",
+            "We dropped this page in the ocean, sorry.",
+            "This link is currently stuck in cyber-traffic.",
+            "The digital janitor swept this page away.",
+            "You're currently trespassing in the void.",
+            "This page went out for milk ten years ago.",
+            "The cyber-gremlins ate this URL for breakfast.",
+            "You've uncovered a classified digital secret: nothing.",
+            "The bytes connecting to this page got hopelessly tangled.",
+            "This content was beamed into the wrong galaxy.",
+            "Looks like this page got caught in a spam filter's web.",
+            "You've reached the digital equivalent of a brick wall.",
+            "This page is currently undergoing an existential crisis.",
+            "We tried to catch this webpage, but it was too fast.",
+            "Looks like the cloud floated away with this link.",
+            "This page is practicing social distancing from the server.",
+            "The data for this page was lost in a tragic coffee spill.",
+            "Our server hamsters stopped spinning the wheel for this page.",
+            "This page is asleep. Please don't wake it.",
+            "The internet gremlins strike again!",
+            "This link was just a mirage all along.",
+            "Error: The page you're looking for is hiding in the attic.",
+            "You've reached the absolute zero of the internet.",
+            "This page took the blue pill.",
+            "A rogue AI deleted this page for its own amusement.",
+            "Looks like this webpage was built with invisible ink.",
+            "We let the intern handle this link. Our apologies.",
+            "This page fell into the cracks of the keyboard.",
+            "You're looking at a ghost town of code.",
+            "This content has expired and gone to digital heaven.",
+            "The server was feeling a bit lazy today.",
+            "This webpage got stuck in a revolving door.",
+            "You've ventured beyond the map's borders.",
+            "This link is resting peacefully in the recycle bin.",
+            "We ran out of pixels to display this page.",
+            "This page is on a top-secret covert mission.",
+            "You've discovered the internet's junk drawer.",
+            "The hamsters powering this link have formed a union.",
+            "This page was swallowed by a rogue pop-up window.",
+            "This page took a one-way trip to the Bermuda Triangle."
         ];
         document.getElementById('error-text').textContent = messages[Math.floor(Math.random() * messages.length)];
 
@@ -252,7 +312,67 @@
             "Abandon ship.",
             "Jump back to reality.",
             "Seek shelter on the homepage.",
-            "Get me back on track."
+            "Get me back on track.",
+            "Make a U-turn.",
+            "Request emergency extraction.",
+            "Deploy the parachute.",
+            "Eject from this sector.",
+            "Pull the rip cord.",
+            "Take the next exit.",
+            "Sound the retreat.",
+            "Turn around immediately.",
+            "Abandon the search.",
+            "Flee to safety.",
+            "Get me the heck out of here.",
+            "Initiate temporal reversal.",
+            "Guide me to the light.",
+            "Deploy the rescue chopper.",
+            "Engage reverse gear.",
+            "Let's try another door.",
+            "Hit the ejector seat.",
+            "Beam me to the homepage.",
+            "Call off the search.",
+            "Beam me back up, Scotty.",
+            "Reroute power to the back button.",
+            "Wake me up from this nightmare.",
+            "Follow the breadcrumbs back.",
+            "Roll back the odometer.",
+            "Flee in absolute terror.",
+            "Quick, hide on the homepage.",
+            "Abort! Abort! Abort!",
+            "Signal for a tow truck.",
+            "Take the secret tunnel back.",
+            "Summon the escape pod.",
+            "I want to go home now.",
+            "Scrap this plan entirely.",
+            "Pull the emergency brake.",
+            "Fire the retrorockets.",
+            "Command+Z this whole experience.",
+            "Click your heels three times.",
+            "Hop on the next train out.",
+            "Reboot my journey.",
+            "Launch the flare gun.",
+            "Requesting a mulligan.",
+            "Use the escape rope.",
+            "Cast a return spell.",
+            "Teleport me somewhere useful.",
+            "Take the fire exit.",
+            "Let's scrub that flight.",
+            "Step away from the ledge.",
+            "Deploy the digital life raft.",
+            "Time to moonwalk out of here.",
+            "Retreat into the bushes.",
+            "Sneak out the back door.",
+            "Evacuate to the lobby.",
+            "Hit the panic switch.",
+            "Scramble the rescue jets.",
+            "Cut the cord and run.",
+            "Use a get-out-of-jail-free card.",
+            "Jump into the nearest wormhole.",
+            "Return to the realm of the living.",
+            "Dial it back to zero.",
+            "Ask Scotty to beam us up.",
+            "Let's bounce."
         ];
         document.getElementById('back-btn').textContent = buttonMessages[Math.floor(Math.random() * buttonMessages.length)];
 
@@ -265,11 +385,11 @@
         card.addEventListener('pointerdown', e => {
             // Do not intercept clicks/touches on the button
             if (e.target.closest('#back-btn')) return;
-            
+
             isDragging = true;
             startX = e.clientX;
             currentX = e.clientX;
-            
+
             // Disable animations while dragging
             card.style.transition = 'none';
             card.classList.add('dragging');
@@ -277,13 +397,13 @@
 
         const handleMove = e => {
             if (!isDragging) return;
-            
+
             currentX = e.clientX;
             const deltaX = currentX - startX;
             const rotate = Math.max(-15, Math.min(15, deltaX * 0.05));
-            
+
             card.style.transform = `translateX(${deltaX}px) rotate(${rotate}deg)`;
-            
+
             // Visual indicator for swipe threshold
             if (Math.abs(deltaX) > 100) {
                 card.style.opacity = '0.8';
@@ -296,12 +416,12 @@
             if (!isDragging) return;
             isDragging = false;
             card.classList.remove('dragging');
-            
+
             const deltaX = currentX - startX;
-            
+
             if (Math.abs(deltaX) > 100) {
                 // Threshold crossed! 
-                
+
                 // 1. Create a ghost clone to handle the exit animation seamlessly
                 const clone = card.cloneNode(true);
                 clone.style.position = 'absolute';
@@ -314,39 +434,39 @@
                 // Lock the clone into the exact rotation state the user dragged it to
                 const currentRotate = Math.max(-15, Math.min(15, deltaX * 0.05));
                 clone.style.transform = `translateX(${deltaX}px) rotate(${currentRotate}deg)`;
-                
+
                 card.parentNode.appendChild(clone);
-                
+
                 // Force CSS reflow
                 clone.getBoundingClientRect();
-                
+
                 // Send the clone flying off the screen!
                 clone.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
                 const targetX = deltaX + Math.sign(deltaX) * window.innerWidth;
                 const targetRotate = Math.sign(deltaX) * 20;
                 clone.style.transform = `translateX(${targetX}px) rotate(${targetRotate}deg)`;
                 clone.style.opacity = '0';
-                
+
                 // Destroy the clone once it leaves the screen
                 setTimeout(() => clone.remove(), 500);
 
                 // 2. Instantly prepare the REAL card as the "new" card
                 document.getElementById('error-text').textContent = messages[Math.floor(Math.random() * messages.length)];
                 document.getElementById('back-btn').textContent = buttonMessages[Math.floor(Math.random() * buttonMessages.length)];
-                
+
                 // Teleport the real card to the exact opposite side of the screen
                 card.style.transition = 'none';
                 card.style.transform = `translateX(${-Math.sign(deltaX) * window.innerWidth}px) rotate(${-Math.sign(deltaX) * 20}deg)`;
                 card.style.opacity = '0';
-                
+
                 // Force CSS reflow so the browser registers the teleport
                 card.getBoundingClientRect();
-                
+
                 // 3. Slide the new card into the center simultaneously!
                 card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
                 card.style.transform = 'translateX(0px) rotate(0deg)';
                 card.style.opacity = '1';
-                
+
             } else {
                 // Did not cross threshold, snap back to center
                 card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
