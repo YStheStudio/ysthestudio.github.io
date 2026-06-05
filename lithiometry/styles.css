@@ -484,11 +484,6 @@ footer {
 
 /* Battery Icon CSS replicating swift logic */
 #demo-battery {
-    /* Configurable vertical text position */
-    --text-y-landscape: -55%;
-    --text-y-portrait: -50%;
-    --text-y-offset: var(--text-y-landscape);
-
     /* The base grid height from your container */
     --body-w: calc(var(--h) * 23.5 / 13);
 
@@ -502,9 +497,7 @@ footer {
 
 @media (max-width: 768px),
 (orientation: portrait) {
-    #demo-battery {
-        --text-y-offset: var(--text-y-portrait);
-    }
+    /* Portrait specific overrides if necessary */
 }
 
 /* The 23.5x13 Body */
@@ -546,19 +539,22 @@ footer {
 /* Text Layer */
 .battery-text {
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 0;
     width: var(--body-w);
-    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: calc(var(--h) * 11 / 13);
     font-weight: 600;
-    line-height: var(--h);
 
     /* Faked Knockout effect matching wallpaper color */
     color: #3972a7;
     mix-blend-mode: normal;
 
-    transform: translateY(var(--text-y-offset)) translateX(calc(var(--h) * -0.25 / 13));
+    /* -3% translation provides optical centering for SF Pro */
+    transform: translateY(-3%) translateX(calc(var(--h) * -0.25 / 13));
     /* Unplugged offset */
     transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1),
         color 0.3s cubic-bezier(0.33, 1, 0.68, 1);
@@ -628,7 +624,7 @@ footer {
 #demo-battery.plugged-in .battery-text {
     color: white;
     mix-blend-mode: normal;
-    transform: translateY(var(--text-y-offset)) translateX(calc(var(--h) * -3.0 / 13));
+    transform: translateY(-3%) translateX(calc(var(--h) * -3.0 / 13));
     /* Plugged in offset */
 }
 
@@ -684,7 +680,7 @@ footer {
 }
 
 #demo-battery.full.plugged-in .battery-text {
-    transform: translateY(var(--text-y-offset)) translateX(calc(var(--h) * -0.25 / 13));
+    transform: translateY(-3%) translateX(calc(var(--h) * -0.25 / 13));
     /* Return to normal center */
     transition: none;
     /* Instantly snap */
