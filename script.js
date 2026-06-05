@@ -1,5 +1,14 @@
 // Particles.js Initialization
 if (typeof particlesJS !== 'undefined') {
+    const container = document.getElementById("particles-js");
+    let particleColors = ["#8AD98A", "#65C466"];
+    let lineColor = "#8AD98A";
+
+    if (container && container.dataset.theme === "blue") {
+        particleColors = ["#6EAEFF", "#2484FF"];
+        lineColor = "#2484FF";
+    }
+
     particlesJS("particles-js", {
         "particles": {
             "number": {
@@ -10,7 +19,7 @@ if (typeof particlesJS !== 'undefined') {
                 }
             },
             "color": {
-                "value": ["#8AD98A", "#65C466"]
+                "value": particleColors
             },
             "shape": {
                 "type": "circle",
@@ -45,7 +54,7 @@ if (typeof particlesJS !== 'undefined') {
             "line_linked": {
                 "enable": true,
                 "distance": 150,
-                "color": "#8AD98A",
+                "color": lineColor,
                 "opacity": 0.2,
                 "width": 1
             },
