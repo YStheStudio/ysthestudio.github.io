@@ -55,6 +55,15 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: grab;
+            will-change: transform, opacity;
+        }
+        
+        .glass-card.dragging {
+            cursor: grabbing;
         }
 
         .error-code {
@@ -246,6 +255,109 @@
             "Get me back on track."
         ];
         document.getElementById('back-btn').textContent = buttonMessages[Math.floor(Math.random() * buttonMessages.length)];
+
+        // Swipe Physics Engine
+        const card = document.querySelector('.glass-card');
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+
+        card.addEventListener('pointerdown', e => {
+            // Do not intercept clicks/touches on the button
+            if (e.target.closest('#back-btn')) return;
+            
+            isDragging = true;
+            startX = e.clientX;
+            currentX = e.clientX;
+            
+            // Disable animations while dragging
+            card.style.transition = 'none';
+            card.classList.add('dragging');
+        });
+
+        const handleMove = e => {
+            if (!isDragging) return;
+            
+            currentX = e.clientX;
+            const deltaX = currentX - startX;
+            const rotate = Math.max(-15, Math.min(15, deltaX * 0.05));
+            
+            card.style.transform = `translateX(${deltaX}px) rotate(${rotate}deg)`;
+            
+            // Visual indicator for swipe threshold
+            if (Math.abs(deltaX) > 100) {
+                card.style.opacity = '0.8';
+            } else {
+                card.style.opacity = '1';
+            }
+        };
+
+        const handleEnd = e => {
+            if (!isDragging) return;
+            isDragging = false;
+            card.classList.remove('dragging');
+            
+            const deltaX = currentX - startX;
+            
+            if (Math.abs(deltaX) > 100) {
+                // Threshold crossed! 
+                
+                // 1. Create a ghost clone to handle the exit animation seamlessly
+                const clone = card.cloneNode(true);
+                clone.style.position = 'absolute';
+                clone.style.left = card.offsetLeft + 'px';
+                clone.style.top = card.offsetTop + 'px';
+                clone.style.margin = '0';
+                clone.style.width = card.offsetWidth + 'px';
+                clone.style.height = card.offsetHeight + 'px';
+                clone.style.boxSizing = 'border-box';
+                // Lock the clone into the exact rotation state the user dragged it to
+                const currentRotate = Math.max(-15, Math.min(15, deltaX * 0.05));
+                clone.style.transform = `translateX(${deltaX}px) rotate(${currentRotate}deg)`;
+                
+                card.parentNode.appendChild(clone);
+                
+                // Force CSS reflow
+                clone.getBoundingClientRect();
+                
+                // Send the clone flying off the screen!
+                clone.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
+                const targetX = deltaX + Math.sign(deltaX) * window.innerWidth;
+                const targetRotate = Math.sign(deltaX) * 20;
+                clone.style.transform = `translateX(${targetX}px) rotate(${targetRotate}deg)`;
+                clone.style.opacity = '0';
+                
+                // Destroy the clone once it leaves the screen
+                setTimeout(() => clone.remove(), 500);
+
+                // 2. Instantly prepare the REAL card as the "new" card
+                document.getElementById('error-text').textContent = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('back-btn').textContent = buttonMessages[Math.floor(Math.random() * buttonMessages.length)];
+                
+                // Teleport the real card to the exact opposite side of the screen
+                card.style.transition = 'none';
+                card.style.transform = `translateX(${-Math.sign(deltaX) * window.innerWidth}px) rotate(${-Math.sign(deltaX) * 20}deg)`;
+                card.style.opacity = '0';
+                
+                // Force CSS reflow so the browser registers the teleport
+                card.getBoundingClientRect();
+                
+                // 3. Slide the new card into the center simultaneously!
+                card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
+                card.style.transform = 'translateX(0px) rotate(0deg)';
+                card.style.opacity = '1';
+                
+            } else {
+                // Did not cross threshold, snap back to center
+                card.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease';
+                card.style.transform = 'translateX(0px) rotate(0deg)';
+                card.style.opacity = '1';
+            }
+        };
+
+        window.addEventListener('pointermove', handleMove);
+        window.addEventListener('pointerup', handleEnd);
+        window.addEventListener('pointercancel', handleEnd);
     </script>
 </body>
 
