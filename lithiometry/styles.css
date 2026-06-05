@@ -150,23 +150,29 @@ html {
     user-select: none;
     -webkit-user-select: none;
 }
+
 .lightbox-nav:hover {
     background: rgba(255, 255, 255, 0.25);
     transform: translateY(-50%) scale(1.1);
 }
+
 .lightbox-nav:active {
     transform: translateY(-50%) scale(0.95);
 }
+
 .feature-card.expanded .lightbox-nav {
     opacity: 1;
     pointer-events: auto;
 }
+
 .lightbox-prev {
     left: 40px;
 }
+
 .lightbox-next {
     right: 40px;
 }
+
 .lightbox-nav svg {
     pointer-events: none;
 }
@@ -205,7 +211,7 @@ html {
 .feature-card.expanded .image-stack .stack-pos-0 {
     transform: translate(var(--expand-x), var(--expand-y, 0px)) scale(var(--expand-scale));
     z-index: 20;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
     cursor: zoom-out;
 }
 
@@ -309,7 +315,8 @@ html {
 }
 
 .image-stack:hover .stack-pos-0 {
-    transform: translateY(-5px) scale(1.02);
+    transform: translateY(0px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .feature-text {
@@ -378,8 +385,13 @@ footer {
         --expand-scale: 1.15;
     }
 
-    .lightbox-prev { left: 10px; }
-    .lightbox-next { right: 10px; }
+    .lightbox-prev {
+        left: 10px;
+    }
+
+    .lightbox-next {
+        right: 10px;
+    }
 
     .image-stack,
     .feature-text {
@@ -457,7 +469,7 @@ footer {
 #demo-menubar {
     --base-h: 50cqh;
     --h: var(--js-h, var(--base-h));
-    
+
     position: absolute;
     top: 12%;
     right: 9%;
