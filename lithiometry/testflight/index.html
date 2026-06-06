@@ -63,7 +63,8 @@
 
         .tf-btn {
             display: inline-block;
-            background: #2484FF; /* TestFlight Blue */
+            background: #2484FF;
+            /* TestFlight Blue */
             color: white;
             padding: 14px 28px;
             border-radius: 999px;
@@ -83,6 +84,27 @@
             box-shadow: 0 6px 20px rgba(36, 132, 255, 0.4);
         }
     </style>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../Resources/lithiometry_icon_default.png">
+    <link rel="apple-touch-icon" href="../../Resources/lithiometry_icon_default.png">
+
+    <!-- Open Graph / Facebook / Slack -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ysthestudio.github.io/lithiometry/testflight/">
+    <meta property="og:title" content="Join the Lithiometry Beta - Lithiometry">
+    <meta property="og:description"
+        content="The iPhone Aesthetic Battery Icon Experience for macOS. Monitor your current capacity, wattage, and detailed adapter information at a glance.">
+    <!-- Replace this image URL with a nice 1200x630 banner-->
+    <meta property="og:image" content="https://ysthestudio.github.io/Resources/lithiometry_testflight_thumbnail.png">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ysthestudio.github.io/lithiometry/testflight/">
+    <meta name="twitter:title" content="Join the Lithiometry Beta - Lithiometry">
+    <meta name="twitter:description"
+        content="The iPhone Aesthetic Battery Icon Experience for macOS. Monitor your current capacity, wattage, and detailed adapter information at a glance.">
+    <meta name="twitter:image" content="https://ysthestudio.github.io/Resources/lithiometry_testflight_thumbnail.png">
 </head>
 
 <body>
@@ -138,7 +160,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const isMac = /Macintosh|Mac OS X/.test(navigator.userAgent) && !/iPad|iPhone|iPod/.test(navigator.userAgent);
-            
+
             if (!isMac) {
                 document.getElementById('non-mac-steps').style.display = 'block';
             }
