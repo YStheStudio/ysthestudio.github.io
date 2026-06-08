@@ -109,16 +109,21 @@ html {
     box-shadow: 0 6px 20px rgba(101, 196, 102, 0.5);
 }
 
-.privacy-link {
-    display: block;
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
     margin-top: 16px;
+}
+
+.footer-link {
     color: var(--text-secondary);
     text-decoration: underline;
     font-size: 0.95rem;
     transition: color 0.2s ease;
 }
 
-.privacy-link:hover {
+.footer-link:hover {
     color: var(--accent);
 }
 
