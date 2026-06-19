@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lithiometry - Redeem Code</title>
+
+    <!-- Global styling from root -->
+    <link rel="stylesheet" href="../../styles.css">
+
+    <!-- Lithiometry specific global styles -->
+    <link rel="stylesheet" href="../styles.css">
+
+    <!-- Specific card styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Open Graph / Social Media Thumbnails -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ysthestudio.github.io/lithiometry/card/">
+    <meta property="og:title" content="Lithiometry - Redeem Code">
+    <meta property="og:description" content="Thank you for testing Lithiometry Beta! Get your free code here.">
+    <meta property="og:image" content="https://ysthestudio.github.io/Resources/lithiometry_card_thumbnail.png">
+    <meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <main class="scene">
+        <div class="card-floater">
+            <div class="card" id="flip-card">
+                <!-- 3D Edge Fillers -->
+                <div class="card-edge" style="transform: translateZ(-2px)"></div>
+                <div class="card-edge" style="transform: translateZ(-1px)"></div>
+                <div class="card-edge" style="transform: translateZ(0px)"></div>
+                <div class="card-edge" style="transform: translateZ(1px)"></div>
+                <div class="card-edge" style="transform: translateZ(2px)"></div>
+
+                <!-- Front Face -->
+                <div class="card-face card-front">
+                    <img src="../../Resources/lithiometry_icon_default.png" alt="Lithiometry Icon" class="card-icon"
+                        draggable="false">
+                    <h2>Lithiometry</h2>
+                    <p>The iPhone Aesthetic Battery Icon Experience</p>
+                    <div class="drag-hint">Drag to flip</div>
+                </div>
+
+                <!-- Back Face -->
+                <div class="card-face card-back">
+                    <h3>Thank you for testing Lithiometry Beta!</h3>
+                    <div class="card-stripe">
+                        <div class="stripe-content" id="stripe-content">
+                            <span id="stripe-text"></span>
+                            <button id="copy-btn" title="Copy text">
+                                <img src="../../Resources/square.on.square.png" alt="Copy">
+                            </button>
+                        </div>
+                    </div>
+                    <p>You may use the code above to redeem it at <a href="https://apple.com/redeem" target="_blank"
+                            id="redeem-link" style="color: #65c466; text-decoration: none;">apple.com/redeem</a>.</p>
+                    <div class="drag-hint">Drag to flip</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Particle system scripts from root -->
+    <script src="../../particles.min.js"></script>
+    <script src="../../script.js"></script>
+
+    <!-- Card specific interaction script -->
+    <script src="script.js"></script>
+</body>
+
+</html>

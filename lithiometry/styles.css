@@ -109,6 +109,13 @@ html {
     box-shadow: 0 6px 20px rgba(101, 196, 102, 0.5);
 }
 
+.download-btn.disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    box-shadow: none;
+    pointer-events: none;
+}
+
 .footer-links {
     display: flex;
     justify-content: center;
