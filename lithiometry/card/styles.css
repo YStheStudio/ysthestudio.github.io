@@ -54,6 +54,7 @@ html {
     transform-style: preserve-3d;
     cursor: grab;
     will-change: transform;
+    touch-action: none;
 }
 
 .card.is-dragging {
@@ -374,5 +375,57 @@ html {
 
     100% {
         left: 200%;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .card-face {
+        padding: 20px;
+    }
+
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+    }
+
+    .card h2 {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+    }
+
+    .card p {
+        font-size: 0.85rem;
+    }
+
+    .card-back h3 {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+
+    .card-stripe {
+        width: 80%;
+        margin-bottom: 12px;
+    }
+
+    #copy-btn {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+    }
+    
+    #copy-btn img {
+        width: 20px;
+        height: 20px;
+    }
+
+    #stripe-text {
+        font-size: 0.9rem;
+    }
+
+    .drag-hint {
+        bottom: 12px;
+        font-size: 0.7rem;
     }
 }
