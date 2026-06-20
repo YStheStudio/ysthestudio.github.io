@@ -334,8 +334,19 @@ html {
 
 .drag-hint::before,
 .drag-hint::after {
-    content: '↔';
-    font-family: sans-serif;
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: currentColor;
+    -webkit-mask-image: url('../../Resources/arrow.left.and.right.png');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('../../Resources/arrow.left.and.right.png');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
 }
 
 @keyframes pulse {
