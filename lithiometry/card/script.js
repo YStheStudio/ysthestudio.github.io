@@ -52,7 +52,7 @@ card.addEventListener('pointermove', (e) => {
     const rawTiltRatio = (e.clientY - centerY) / (rect.height / 2);
     currentTiltX = Math.max(-15, Math.min(15, rawTiltRatio * -15));
     
-    card.style.transform = `rotateY(${dragRotY}deg) rotateX(${currentTiltX}deg)`;
+    card.style.transform = `rotateX(${currentTiltX}deg) rotateY(${dragRotY}deg)`;
     card.style.setProperty('--ry', dragRotY);
     card.style.setProperty('--rx', currentTiltX);
 });
@@ -84,7 +84,7 @@ const handlePointerEnd = (e) => {
     isFlipped = (snappedRotation / 180) % 2 !== 0;
     currentTiltX = 0; // Reset tilt on release
     
-    card.style.transform = `rotateY(${currentRotationY}deg) rotateX(0deg)`;
+    card.style.transform = `rotateX(0deg) rotateY(${currentRotationY}deg)`;
     card.style.setProperty('--ry', currentRotationY);
     card.style.setProperty('--rx', 0);
 };
