@@ -185,7 +185,7 @@ html {
     /* Parallax depth effect using CSS sin() to bound the value continuously.
        Calculates both horizontal (--ry) and vertical (--rx) offsets to create a true 3D sunken effect. */
     transform:
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -30px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -30px));
+        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -30px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 30px));
     will-change: transform;
 }
 
@@ -286,7 +286,7 @@ html {
 .card-back p {
     transform: 
         translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -10px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -10px));
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 10px));
 }
 
 .card-back h3 {
@@ -301,7 +301,7 @@ html {
     will-change: transform;
     transform: 
         translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -20px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -20px));
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 20px));
 }
 
 /* Drag hint */
@@ -329,7 +329,7 @@ html {
 .card-back .drag-hint {
     transform: 
         translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -5px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -5px));
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 5px));
 }
 
 .drag-hint::before,
