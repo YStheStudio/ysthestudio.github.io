@@ -56,7 +56,6 @@ html {
     flex-direction: column;
     align-items: center;
     padding: 60px 40px;
-    animation: fadeUp 0.8s ease-out;
 }
 
 .app-icon {
