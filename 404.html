@@ -70,7 +70,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 30px auto;
             font-size: 120px;
             /* base height */
             --h: 1em;
@@ -107,30 +107,6 @@
             margin-left: calc(var(--h) * 2 / 41);
             margin-right: calc(var(--h) * -6 / 41);
             /* Excludes tip from centering calculation */
-        }
-
-        .battery-status-icons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 30px;
-        }
-
-        .battery-status-icons img {
-            filter: brightness(0) invert(1);
-        }
-
-        #status-plug {
-            height: 20px;
-        }
-
-        #status-arrow {
-            height: 18px;
-        }
-
-        #status-bolt {
-            height: 28px;
         }
 
         .error-code {
@@ -237,11 +213,6 @@
                     <h1 class="error-code"><span class="dim">4</span>0<span class="dim">4</span></h1>
                 </div>
                 <div class="battery-tip"></div>
-            </div>
-            <div class="battery-status-icons">
-                <img id="status-plug" src="/Resources/powerplug.fill.png" alt="Plug">
-                <img id="status-arrow" src="/Resources/arrow.right.png" alt="Arrow">
-                <img id="status-bolt" src="/Resources/bolt.png" alt="Bolt">
             </div>
             <p id="error-text" class="error-message">Looks like you drifted into deep space.</p>
             <a id="back-btn" href="/lithiometry/" class="back-button">Return to Base</a>
