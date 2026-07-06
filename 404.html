@@ -66,16 +66,91 @@
             cursor: grabbing;
         }
 
-        .error-code {
+        .battery-404 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
             font-size: 120px;
-            font-weight: 800;
+            /* base height */
+            --h: 1em;
+            --battery-bg: rgba(255, 255, 255, 0.15);
+        }
+
+        .battery-body {
+            position: relative;
+            height: var(--h);
+            aspect-ratio: 75 / 41;
+            border-radius: calc(var(--h) * 13 / 41);
+            background: var(--battery-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .battery-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5%;
+            /* Red sliver for low battery */
+            background: #ff3b30;
+        }
+
+        .battery-tip {
+            width: calc(var(--h) * 4 / 41);
+            height: calc(var(--h) * 10 / 41);
+            background: var(--battery-bg);
+            border-radius: 0 calc(var(--h) * 5 / 41) calc(var(--h) * 5 / 41) 0;
+            margin-left: calc(var(--h) * 2 / 41);
+            margin-right: calc(var(--h) * -6 / 41);
+            /* Excludes tip from centering calculation */
+        }
+
+        .battery-status-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .battery-status-icons img {
+            filter: brightness(0) invert(1);
+        }
+
+        #status-plug {
+            height: 20px;
+        }
+
+        #status-arrow {
+            height: 18px;
+        }
+
+        #status-bolt {
+            height: 28px;
+        }
+
+        .error-code {
+            position: relative;
+            z-index: 2;
+            top: -0.03em;
+            /* Visually center the font baseline */
+            left: -0.01em;
+            /* Visually center horizontally */
+            font-size: 0.8em;
+            /* 80% of battery height */
+            font-weight: 700;
             margin: 0;
             line-height: 1;
-            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0px 10px 30px rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .error-code .dim {
+            opacity: 0.3;
         }
 
         .error-message {
@@ -139,7 +214,7 @@
                 margin: 0 auto;
             }
 
-            .error-code {
+            .battery-404 {
                 font-size: 80px;
             }
 
@@ -156,7 +231,18 @@
 
     <div class="not-found-container">
         <div class="glass-card">
-            <h1 class="error-code">404</h1>
+            <div class="battery-404">
+                <div class="battery-body">
+                    <div class="battery-fill"></div>
+                    <h1 class="error-code"><span class="dim">4</span>0<span class="dim">4</span></h1>
+                </div>
+                <div class="battery-tip"></div>
+            </div>
+            <div class="battery-status-icons">
+                <img id="status-plug" src="Resources/powerplug.fill.png" alt="Plug">
+                <img id="status-arrow" src="Resources/arrow.right.png" alt="Arrow">
+                <img id="status-bolt" src="Resources/bolt.png" alt="Bolt">
+            </div>
             <p id="error-text" class="error-message">Looks like you drifted into deep space.</p>
             <a id="back-btn" href="/lithiometry/" class="back-button">Return to Base</a>
         </div>
