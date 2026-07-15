@@ -55,6 +55,26 @@ card.addEventListener('pointermove', (e) => {
     card.style.transform = `rotateX(${currentTiltX}deg) rotateY(${dragRotY}deg)`;
     card.style.setProperty('--ry', dragRotY);
     card.style.setProperty('--rx', currentTiltX);
+
+    // Dynamic base die reflection
+    // SVG gradient objectBoundingBox translate requires small values (e.g., 0 to 1).
+    // Using dragRotY and currentTiltX directly maps it physically to the drag movement.
+    const dx = dragRotY / 100;
+    const dy = currentTiltX / 100;
+    const siliconHolo = document.getElementById('siliconHolo');
+    const goldDieHolo = document.getElementById('goldDieHolo');
+    const purpleDieHolo = document.getElementById('purpleDieHolo');
+    
+    if (siliconHolo) siliconHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+    if (goldDieHolo) goldDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+    if (purpleDieHolo) purpleDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+
+    // Calculate modulo offset for the rainbow CSS gradient to prevent it from translating off-screen
+    // Repeating gradient cycles every 100%, so modulo by 100 ensures perfect infinite looping
+    const rawOffset = (dragRotY * -0.2) + (currentTiltX * -0.4);
+    const modOffset = rawOffset % 100; 
+    card.style.setProperty('--shine-offset', `${modOffset}%`);
+
 });
 
 const handlePointerEnd = (e) => {
@@ -116,6 +136,30 @@ if (stripeText && customText) {
     stripeText.textContent = customText;
 }
 
+// Variant Text Logic
+let licenseText = 'STANDARD LICENSE';
+
+// Early Supporter Variant
+const isEarlySupporter = urlParams.get('e') === 'true';
+const customName = urlParams.get('n');
+const cardholder = document.querySelector('.cardholder');
+
+if (isEarlySupporter) {
+    card.classList.add('early-supporter-active');
+    licenseText = 'EARLY SUPPORTER LICENSE';
+}
+
+// Development Team Variant
+if (customName && customName.toLowerCase() === 'yusuke_saeki') {
+    card.classList.add('dev-team-active');
+    licenseText = 'DEVELOPMENT TEAM LICENSE';
+}
+
+// Apply the correct license text to the cardholder element
+if (cardholder) {
+    cardholder.textContent = licenseText;
+}
+
 // Copy button logic
 const copyBtn = document.getElementById('copy-btn');
 if (copyBtn && stripeText) {
@@ -149,3 +193,99 @@ if (redeemLink) {
         e.stopPropagation();
     });
 }
+
+// Procedural Dense Copper Trace Generator for PCBs
+function generateDetailedTraces() {
+    const svgs = document.querySelectorAll('.cpu-chip-svg');
+    svgs.forEach((svg) => {
+        // Find the rects that use the old trace patterns
+        const traceRects = svg.querySelectorAll('rect[fill^="url(#traces"]');
+        if (traceRects.length === 0) return;
+        
+        const traceRect = traceRects[0];
+        // Hide the original simple repeated pattern
+        traceRect.style.display = 'none';
+
+        // Get the dimensions from the SVG viewBox
+        const viewBox = svg.getAttribute('viewBox').split(' ');
+        const width = parseFloat(viewBox[2]);
+        const height = parseFloat(viewBox[3]);
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('stroke', 'rgba(212,175,55,0.25)'); // Metallic copper/gold
+        g.setAttribute('fill', 'none');
+
+        // Main traces path
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('stroke-width', '0.25');
+        
+        // Vias path (using round linecaps for zero-length lines to draw perfect circles)
+        const vias = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        vias.setAttribute('stroke-width', '0.8');
+        vias.setAttribute('stroke-linecap', 'round');
+        
+        let pathD = "";
+        let viasD = "";
+
+        // Generate traces dynamically. Density scales with chip area.
+        const numTraces = Math.floor((width * height) / 30); 
+        
+        for (let i = 0; i < numTraces; i++) {
+            let x = Math.random() * width;
+            let y = Math.random() * height;
+            
+            // Constrain start to padding
+            x = Math.max(8, Math.min(width - 8, x));
+            y = Math.max(8, Math.min(height - 8, y));
+
+            pathD += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
+            let currentX = x;
+            let currentY = y;
+            
+            const segments = Math.floor(Math.random() * 4) + 2;
+            for (let j = 0; j < segments; j++) {
+                const dir = Math.floor(Math.random() * 8);
+                const len = Math.random() * 12 + 3;
+                
+                let nx = currentX, ny = currentY;
+                // Manhattan Routing (N, NE, E, SE, S, SW, W, NW)
+                if (dir === 0) ny -= len;
+                else if (dir === 1) { nx += len; ny -= len; }
+                else if (dir === 2) nx += len;
+                else if (dir === 3) { nx += len; ny += len; }
+                else if (dir === 4) ny += len;
+                else if (dir === 5) { nx -= len; ny += len; }
+                else if (dir === 6) nx -= len;
+                else if (dir === 7) { nx -= len; ny -= len; }
+                
+                // Keep inside padded bounds
+                nx = Math.max(6, Math.min(width - 6, nx));
+                ny = Math.max(6, Math.min(height - 6, ny));
+                
+                pathD += ` L ${nx.toFixed(1)} ${ny.toFixed(1)}`;
+                currentX = nx;
+                currentY = ny;
+            }
+            
+            // Add a via at the end of the trace randomly
+            if (Math.random() > 0.4) {
+                viasD += `M ${currentX.toFixed(1)} ${currentY.toFixed(1)} h 0.01 `;
+            }
+        }
+        
+        path.setAttribute('d', pathD);
+        if (viasD) {
+            vias.setAttribute('d', viasD);
+        }
+        
+        g.appendChild(path);
+        g.appendChild(vias);
+        
+        // Insert right after the traceRect so it sits perfectly on the substrate, 
+        // under the main die and components (painter's algorithm handles layering).
+        traceRect.parentNode.insertBefore(g, traceRect.nextSibling);
+    });
+}
+
+// Run the procedural generation
+generateDetailedTraces();

@@ -106,10 +106,11 @@ html {
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 32px;
+    justify-content: space-between;
+    align-items: stretch;
+    text-align: left;
+    padding: 24px 32px;
+    box-sizing: border-box;
 }
 
 /* Interactive Glare / Refraction */
@@ -149,49 +150,171 @@ html {
     transform: rotateY(180deg) translateZ(3px);
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
     border: 1px solid rgba(101, 196, 102, 0.2);
+    padding: 0;
 }
 
-/* Content Styling */
-.card-stripe {
-    width: 60%;
-    aspect-ratio: 4 / 1;
-    background-color: #1e293b;
-    border-radius: 0;
-    margin-bottom: 16px;
-    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.4);
+/* Front Face Elements */
+.card-header {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-family: monospace;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: flex-start;
+    user-select: none;
+    transform: 
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 10px))
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -10px));
 }
 
+.bank-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 1px;
+}
+
+.network-logo {
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.card-chip-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: auto;
+    margin-bottom: 12px;
+    transform: 
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 15px))
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -15px));
+}
+
+.contactless-icon {
+    color: rgba(255,255,255,0.7);
+}
+
+.card-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
+    margin-bottom: 24px;
+    user-select: none;
+    transform: 
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 25px))
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -25px));
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    user-select: none;
+    transform: 
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 20px))
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -20px));
+}
+
+.cardholder {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
+}
+
+.valid-thru {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
+}
+
+.valid-label {
+    font-size: 0.5rem;
+    line-height: 1;
+    text-align: right;
+    font-family: sans-serif;
+    letter-spacing: 0;
+    text-shadow: none;
+    opacity: 0.8;
+}
+
+.valid-date {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* Back Face Elements */
+.magnetic-stripe {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: #111;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.back-content {
+    padding: 110px 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
+    transform: 
+        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -10px))
+        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 10px));
+}
+
+.signature-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.signature-panel {
+    flex: 1;
+    height: 44px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 10px, #f0f0f0 10px, #f0f0f0 20px);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cvv {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.disclaimer {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.4;
+    text-align: justify;
+}
+
+/* Overriding stripe-content for the new signature panel */
 .stripe-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 6px 8px;
-    position: relative;
-    left: 12px;
-    /* Shifts the box exactly half of (button width 24px + gap 4px) to keep text perfectly centered in the card */
-    border: 2px dashed transparent;
-    border-radius: 8px;
-    transition: border-color 0.3s ease;
-
-    /* Parallax depth effect using CSS sin() to bound the value continuously.
-       Calculates both horizontal (--ry) and vertical (--rx) offsets to create a true 3D sunken effect. */
-    transform:
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -30px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 30px));
-    will-change: transform;
-}
-
-/* When resting on back face, show dashed border */
-.card.is-resting-back .stripe-content {
-    border-color: rgba(255, 255, 255, 0.4);
+    gap: 8px;
+    color: #333;
+    font-family: monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
 }
 
 #stripe-text {
@@ -200,11 +323,11 @@ html {
 }
 
 #copy-btn {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.1);
     border: none;
     border-radius: 6px;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -215,14 +338,14 @@ html {
 }
 
 #copy-btn img {
-    width: 12px;
-    height: 12px;
-    filter: brightness(0) invert(1);
-    opacity: 0.9;
+    width: 14px;
+    height: 14px;
+    filter: invert(1);
+    opacity: 0.7;
 }
 
 #copy-btn:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 #copy-btn:active {
@@ -233,75 +356,6 @@ html {
 .card.is-resting-back #copy-btn {
     opacity: 1;
     pointer-events: auto;
-}
-
-
-
-.card-icon {
-    width: 128px;
-    height: 128px;
-    margin-bottom: 16px;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
-    user-select: none;
-    pointer-events: none;
-    
-    /* Pop-out parallax depth effect using CSS sin()
-       Uses positive X multiplier and negative Y multiplier so it appears to float above the glass. */
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 40px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -40px));
-    will-change: transform;
-}
-
-.card h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: #fff;
-    user-select: none;
-    will-change: transform;
-}
-
-.card-front h2 {
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 20px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -20px));
-}
-
-.card p {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-    line-height: 1.5;
-    user-select: none;
-    will-change: transform;
-}
-
-.card-front p {
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 10px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -10px));
-}
-
-.card-back p {
-    transform: 
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -10px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 10px));
-}
-
-.card-back h3 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0 0 16px 0;
-    background: linear-gradient(135deg, #65c466 0%, #4ade80 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    user-select: none;
-    will-change: transform;
-    transform: 
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -20px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 20px));
 }
 
 /* Drag hint */
@@ -389,54 +443,105 @@ html {
     }
 }
 
+.cpu-chip-wrapper {
+    position: relative;
+    display: flex;
+}
+
+.die-shine-overlay {
+    position: absolute;
+    /* Map exactly to the SVG die coordinates: x=42, y=28, w=56, h=64 on a 160x120 viewBox */
+    left: 26.25%;
+    top: 23.333%;
+    width: 35%;
+    height: 53.333%;
+    border-radius: 1px;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 2;
+    background: repeating-linear-gradient(115deg,
+        rgba(255, 0, 0, 0.3) calc(0% + var(--shine-offset, 0%)),
+        rgba(255, 255, 0, 0.3) calc(16.66% + var(--shine-offset, 0%)),
+        rgba(0, 255, 0, 0.3) calc(33.33% + var(--shine-offset, 0%)),
+        rgba(0, 255, 255, 0.3) calc(50% + var(--shine-offset, 0%)),
+        rgba(0, 0, 255, 0.3) calc(66.66% + var(--shine-offset, 0%)),
+        rgba(255, 0, 255, 0.3) calc(83.33% + var(--shine-offset, 0%)),
+        rgba(255, 0, 0, 0.3) calc(100% + var(--shine-offset, 0%))
+    );
+}
+
+/* Early Supporter Variant Styles */
+.early-supporter-chip-wrapper {
+    display: none;
+}
+
+.card.early-supporter-active .standard-chip-wrapper {
+    display: none;
+}
+
+.card.early-supporter-active .early-supporter-chip-wrapper {
+    display: flex;
+}
+
+.die-shine-overlay.early-supporter {
+    /* Map exactly to the massive SVG die coordinates: x=36, y=30, w=84, h=90 on a 200x150 viewBox */
+    left: 18%;
+    top: 20%;
+    width: 42%;
+    height: 60%;
+}
+
+/* Development Team Variant Styles */
+.dev-team-chip-wrapper {
+    display: none;
+}
+
+.card.dev-team-active .standard-chip-wrapper,
+.card.dev-team-active .early-supporter-chip-wrapper {
+    display: none !important;
+}
+
+.card.dev-team-active .dev-team-chip-wrapper {
+    display: flex;
+}
+
+.die-shine-overlay.dev-team {
+    /* Map exactly to the ultra fusion SVG die coordinates: x=46, y=32, w=100, h=116 on a 240x180 viewBox */
+    left: 19.166%;
+    top: 17.777%;
+    width: 41.666%;
+    height: 64.444%;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
     .card-face {
         padding: 20px;
     }
 
-    .card-icon {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 8px;
-    }
-
-    .card h2 {
-        font-size: 1.4rem;
-        margin-bottom: 4px;
-    }
-
-    .card p {
-        font-size: 0.85rem;
-    }
-
-    .card-back h3 {
-        font-size: 1.3rem;
-        margin-bottom: 12px;
-    }
-
-    .card-stripe {
-        width: 80%;
-        margin-bottom: 12px;
-    }
-
-    #copy-btn {
-        width: 40px;
-        height: 40px;
-        padding: 8px;
+    .bank-name {
+        font-size: 0.9rem;
     }
     
-    #copy-btn img {
-        width: 20px;
-        height: 20px;
+    .card-number {
+        font-size: 1.2rem;
+        letter-spacing: 1.5px;
     }
-
-    #stripe-text {
+    
+    .cardholder {
         font-size: 0.9rem;
     }
 
-    .drag-hint {
-        bottom: 12px;
-        font-size: 0.7rem;
+    .back-content {
+        padding: 80px 20px 20px;
+    }
+    
+    .magnetic-stripe {
+        top: 24px;
+        height: 36px;
+    }
+
+    .signature-panel {
+        height: 36px;
     }
 }
