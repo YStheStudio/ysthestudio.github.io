@@ -267,7 +267,7 @@ html {
     background: linear-gradient(to right, #666, #444);
     z-index: 10;
     box-shadow: -2px 0 6px rgba(0,0,0,0.6), inset 1px 0 2px rgba(255,255,255,0.4);
-    opacity: calc(min(var(--peel-amount, 0px) / 1px, 1));
+    opacity: 1;
     transition: width 0.3s ease, left 0.3s ease, right 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
 }
@@ -320,9 +320,21 @@ html {
     transition: none;
 }
 
-/* Fade out during fly off */
+/* Fade out and fly off dynamically */
 .seal-container.is-flying-off .seal-back {
     opacity: 0 !important;
+}
+
+.seal-container.is-flying-off.peel-from-left .seal-back {
+    left: var(--locked-peel) !important;
+    width: var(--locked-peel) !important;
+    transform: rotate(var(--peel-angle, 0deg)) translateX(1000px) !important;
+}
+
+.seal-container.is-flying-off.peel-from-right .seal-back {
+    right: var(--locked-peel) !important;
+    width: var(--locked-peel) !important;
+    transform: rotate(calc(var(--peel-angle, 0deg) * -1)) translateX(-1000px) !important;
 }
 
 /* Hide seal entirely when fully peeled */
