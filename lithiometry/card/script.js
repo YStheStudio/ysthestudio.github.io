@@ -200,14 +200,55 @@ if (signatureName && customName) {
 // Custom Date Format logic
 const customDate = urlParams.get('d');
 const validDateEl = document.querySelector('.valid-date');
+const memberSinceDateEl = document.getElementById('member-since-date');
 
-if (validDateEl && customDate && customDate.length >= 3) {
-    const monthNum = parseInt(customDate.slice(0, -2), 10);
-    const yearStr = customDate.slice(-2);
+if (customDate) {
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-    if (monthNum >= 1 && monthNum <= 12) {
-        validDateEl.textContent = `${months[monthNum - 1]} ${yearStr}`;
+    // Parse new format: MMDDHHMMSSYYYY or MDDHHMMSSYYYY (e.g. 4101230592026 -> APR 10 12:30:59 PDT 2026)
+    if (customDate.length === 13 || customDate.length === 14) {
+        const year = parseInt(customDate.slice(-4), 10);
+        const seconds = parseInt(customDate.slice(-6, -4), 10);
+        const minutes = parseInt(customDate.slice(-8, -6), 10);
+        const hours = parseInt(customDate.slice(-10, -8), 10);
+        const day = parseInt(customDate.slice(-12, -10), 10);
+        const monthNum = parseInt(customDate.slice(0, -12), 10);
+
+        if (monthNum >= 1 && monthNum <= 12) {
+            const memberSinceStr = `${months[monthNum - 1]} ${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} PDT ${year}`;
+
+            if (memberSinceDateEl) {
+                memberSinceDateEl.style.fontSize = '1rem';
+                memberSinceDateEl.style.letterSpacing = '0.5px';
+                memberSinceDateEl.textContent = memberSinceStr;
+            }
+
+            if (validDateEl) {
+                // Calculate Valid Thru as exactly 28 days after Member Since
+                const dateObj = new Date(year, monthNum - 1, day, hours, minutes, seconds);
+                dateObj.setDate(dateObj.getDate() + 28);
+
+                const vYear = dateObj.getFullYear();
+                const vMonth = months[dateObj.getMonth()];
+                const vDay = dateObj.getDate().toString().padStart(2, '0');
+                const vHours = dateObj.getHours().toString().padStart(2, '0');
+                const vMinutes = dateObj.getMinutes().toString().padStart(2, '0');
+                const vSeconds = dateObj.getSeconds().toString().padStart(2, '0');
+
+                validDateEl.style.fontSize = '0.65rem';
+                validDateEl.style.letterSpacing = '0.3px';
+                validDateEl.textContent = `${vMonth} ${vDay} ${vHours}:${vMinutes}:${vSeconds} PDT ${vYear}`;
+            }
+        }
+    }
+    // Fallback to legacy format: MMYY or MYY
+    else if (customDate.length >= 3 && validDateEl) {
+        const monthNum = parseInt(customDate.slice(0, -2), 10);
+        const yearStr = customDate.slice(-2);
+
+        if (monthNum >= 1 && monthNum <= 12) {
+            validDateEl.textContent = `${months[monthNum - 1]} ${yearStr}`;
+        }
     }
 }
 
@@ -273,10 +314,14 @@ if (sealContainer) {
             const maxWidth = sealContainer.offsetWidth;
             currentPeelAmount = Math.min(currentPeelAmount, maxWidth);
 
+            // Calculate dynamic rotation limit (0 to 30 deg) over the first 20% of peeling
+            const peelRatio = currentPeelAmount / maxWidth;
+            const dynamicAngleLimit = Math.min(30, (peelRatio / 0.2) * 30);
+
             // Calculate peel angle based on vertical drag
             let angle = Math.atan2(deltaY, Math.max(10, Math.abs(deltaX))) * (180 / Math.PI);
-            // Clamp the angle to prevent it from breaking the illusion
-            angle = Math.max(-30, Math.min(30, angle));
+            // Clamp the angle dynamically to build physical resistance initially
+            angle = Math.max(-dynamicAngleLimit, Math.min(dynamicAngleLimit, angle));
 
             // Calculate horizontal skew offset for the clip-path cut line
             const containerHalfHeight = sealContainer.offsetHeight / 2;

@@ -418,7 +418,7 @@ html {
 }
 
 .cvv {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Courier New';
     font-size: 1.1rem;
     font-style: italic;
     color: #fff;
@@ -454,7 +454,7 @@ html {
     display: flex;
     flex-direction: column;
     text-align: center;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: sans-serif;
 }
 
 .member-since .label {
