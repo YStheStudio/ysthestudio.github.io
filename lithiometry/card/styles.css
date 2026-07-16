@@ -71,11 +71,10 @@ html {
     transition: background-position 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.card.is-animating .stripe-content,
-.card.is-animating .card-icon,
-.card.is-animating h2,
-.card.is-animating p,
-.card.is-animating h3,
+.card.is-animating .card-number,
+.card.is-animating .card-footer,
+.card.is-animating .card-chip-container,
+.card.is-animating .back-content,
 .card.is-animating .drag-hint {
     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
 }
@@ -188,8 +187,9 @@ html {
         translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -15px));
 }
 
-.contactless-icon {
-    color: rgba(255,255,255,0.7);
+.seal-icon {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
 }
 
 .card-number {
@@ -200,6 +200,9 @@ html {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
     margin-bottom: 24px;
     user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     transform: 
         translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 25px))
         translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -25px));
@@ -216,10 +219,10 @@ html {
 }
 
 .cardholder {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #e0e0e0;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .valid-thru {
@@ -304,17 +307,82 @@ html {
     text-align: justify;
 }
 
-/* Overriding stripe-content for the new signature panel */
-.stripe-content {
+.back-middle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0;
+    padding: 0 4px;
+}
+
+.qr-code {
+    background: rgba(255,255,255,0.9);
+    padding: 6px;
+    border-radius: 4px;
+    display: flex;
+}
+
+.member-since {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.member-since .label {
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.member-since .year {
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 2px;
+}
+
+.holo-sticker {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: repeating-linear-gradient(
+        135deg,
+        rgba(255,0,0,0.4) calc(0% + var(--shine-offset, 0%)),
+        rgba(255,255,0,0.4) calc(16.66% + var(--shine-offset, 0%)),
+        rgba(0,255,0,0.4) calc(33.33% + var(--shine-offset, 0%)),
+        rgba(0,255,255,0.4) calc(50% + var(--shine-offset, 0%)),
+        rgba(0,0,255,0.4) calc(66.66% + var(--shine-offset, 0%)),
+        rgba(255,0,255,0.4) calc(83.33% + var(--shine-offset, 0%)),
+        rgba(255,0,0,0.4) calc(100% + var(--shine-offset, 0%))
+    );
+    box-shadow: inset 0 0 6px rgba(255,255,255,0.6), 0 2px 4px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+    /* Static metallic base under the rainbow */
+    background-color: #e0e0e0;
+}
+
+.holo-sticker::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at calc(50% + var(--anim-ry, 0) * -1.5%) calc(50% + var(--anim-rx, 0) * -1.5%), rgba(255,255,255,0.9) 0%, transparent 60%);
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+}
+
+.signature-name {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    color: #333;
-    font-family: monospace;
-    font-size: 1.2rem;
-    font-weight: bold;
-    letter-spacing: 2px;
+    color: #1a1a1a;
+    font-family: 'Caveat', cursive;
+    font-size: 2.2rem;
+    font-weight: 700;
+    width: 100%;
+    height: 100%;
 }
 
 #stripe-text {
@@ -323,8 +391,8 @@ html {
 }
 
 #copy-btn {
-    background: rgba(0, 0, 0, 0.1);
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 6px;
     width: 28px;
     height: 28px;
@@ -332,31 +400,25 @@ html {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
+    opacity: 1;
+    pointer-events: auto;
     transition: opacity 0.3s ease, background 0.2s ease, transform 0.1s ease;
 }
 
 #copy-btn img {
     width: 14px;
     height: 14px;
-    filter: invert(1);
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 #copy-btn:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 #copy-btn:active {
     transform: scale(0.9);
 }
 
-/* Show button when resting on back */
-.card.is-resting-back #copy-btn {
-    opacity: 1;
-    pointer-events: auto;
-}
 
 /* Drag hint */
 .drag-hint {

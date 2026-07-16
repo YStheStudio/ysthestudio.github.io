@@ -12,6 +12,10 @@ let isAnimating = false; // Track CSS transition state
 // Store the base transformation components for the floating effect
 let currentTiltX = 0;
 
+// Variables for smooth shine interpolation
+let animRy = 0;
+let animRx = 0;
+
 card.addEventListener('pointerdown', (e) => {
     isDragging = true;
     startX = e.clientX;
@@ -56,25 +60,8 @@ card.addEventListener('pointermove', (e) => {
     card.style.setProperty('--ry', dragRotY);
     card.style.setProperty('--rx', currentTiltX);
 
-    // Dynamic base die reflection
-    // SVG gradient objectBoundingBox translate requires small values (e.g., 0 to 1).
-    // Using dragRotY and currentTiltX directly maps it physically to the drag movement.
-    const dx = dragRotY / 100;
-    const dy = currentTiltX / 100;
-    const siliconHolo = document.getElementById('siliconHolo');
-    const goldDieHolo = document.getElementById('goldDieHolo');
-    const purpleDieHolo = document.getElementById('purpleDieHolo');
-    
-    if (siliconHolo) siliconHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
-    if (goldDieHolo) goldDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
-    if (purpleDieHolo) purpleDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
-
-    // Calculate modulo offset for the rainbow CSS gradient to prevent it from translating off-screen
-    // Repeating gradient cycles every 100%, so modulo by 100 ensures perfect infinite looping
-    const rawOffset = (dragRotY * -0.2) + (currentTiltX * -0.4);
-    const modOffset = rawOffset % 100; 
-    card.style.setProperty('--shine-offset', `${modOffset}%`);
-
+    animRy = dragRotY;
+    animRx = currentTiltX;
 });
 
 const handlePointerEnd = (e) => {
@@ -127,6 +114,36 @@ card.addEventListener('transitionend', (e) => {
 });
 
 
+// Smooth Parallax Animation Loop
+// Interpolates the SVG shine and CSS gradients so they smoothly glide back
+// to their resting positions when the card is released.
+function animationLoop() {
+    if (!isDragging && isAnimating) {
+        // Lerp towards the snapped resting position (currentRotationY and 0 tilt)
+        // The factor 0.08 loosely approximates the cubic bezier speed curve
+        animRy += (currentRotationY - animRy) * 0.08;
+        animRx += (0 - animRx) * 0.08;
+    }
+    
+    // Apply visual updates to gradients
+    const dx = animRy / 100;
+    const dy = animRx / 100;
+    const siliconHolo = document.getElementById('siliconHolo');
+    const goldDieHolo = document.getElementById('goldDieHolo');
+    const purpleDieHolo = document.getElementById('purpleDieHolo');
+    
+    if (siliconHolo) siliconHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+    if (goldDieHolo) goldDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+    if (purpleDieHolo) purpleDieHolo.setAttribute('gradientTransform', `translate(${dx}, ${dy})`);
+
+    const rawOffset = (animRy * -0.2) + (animRx * -0.4);
+    card.style.setProperty('--shine-offset', `${rawOffset % 100}%`);
+    card.style.setProperty('--anim-ry', animRy);
+    card.style.setProperty('--anim-rx', animRx);
+
+    requestAnimationFrame(animationLoop);
+}
+requestAnimationFrame(animationLoop);
 
 // Parse URL parameters for custom text inside the stripe
 const urlParams = new URLSearchParams(window.location.search);
@@ -136,30 +153,70 @@ if (stripeText && customText) {
     stripeText.textContent = customText;
 }
 
-// Variant Text Logic
-let licenseText = 'STANDARD LICENSE';
-
 // Early Supporter Variant
 const isEarlySupporter = urlParams.get('e') === 'true';
 const customName = urlParams.get('n');
 const cardholder = document.querySelector('.cardholder');
+const signatureName = document.getElementById('signature-name');
+const sealIcon = document.getElementById('card-seal-icon');
+const backHoloIcon = document.getElementById('back-holo-sticker');
+
+let licenseType = 'STANDARD LICENSE';
 
 if (isEarlySupporter) {
     card.classList.add('early-supporter-active');
-    licenseText = 'EARLY SUPPORTER LICENSE';
+    licenseType = 'EARLY SUPPORTER LICENSE';
+    if (sealIcon) sealIcon.src = '../../Resources/custom.crown.seal.fill.png';
+    if (backHoloIcon) {
+        backHoloIcon.style.webkitMaskImage = "url('../../Resources/custom.crown.seal.fill.png')";
+        backHoloIcon.style.maskImage = "url('../../Resources/custom.crown.seal.fill.png')";
+    }
 }
 
 // Development Team Variant
 if (customName && customName.toLowerCase() === 'yusuke_saeki') {
     card.classList.add('dev-team-active');
-    licenseText = 'DEVELOPMENT TEAM LICENSE';
+    licenseType = 'DEVELOPMENT TEAM LICENSE';
+    if (sealIcon) sealIcon.src = '../../Resources/custom.hammer.seal.fill.png';
+    if (backHoloIcon) {
+        backHoloIcon.style.webkitMaskImage = "url('../../Resources/custom.hammer.seal.fill.png')";
+        backHoloIcon.style.maskImage = "url('../../Resources/custom.hammer.seal.fill.png')";
+    }
 }
 
-// Apply the correct license text to the cardholder element
+// Set License Type Text
 if (cardholder) {
-    cardholder.textContent = licenseText;
+    cardholder.textContent = licenseType;
 }
 
+// Apply custom name to the signature panel on the back if provided
+if (signatureName && customName) {
+    const formattedName = customName.split('_').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join(' ');
+    signatureName.textContent = formattedName;
+}
+
+// Custom Date Format logic
+const customDate = urlParams.get('d');
+const validDateEl = document.querySelector('.valid-date');
+
+if (validDateEl && customDate && customDate.length >= 3) {
+    const monthNum = parseInt(customDate.slice(0, -2), 10);
+    const yearStr = customDate.slice(-2);
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    
+    if (monthNum >= 1 && monthNum <= 12) {
+        validDateEl.textContent = `${months[monthNum - 1]} ${yearStr}`;
+    }
+}
+
+// Custom CVV logic
+const customCvv = urlParams.get('c');
+const cvvEl = document.querySelector('.cvv');
+if (cvvEl && customCvv) {
+    cvvEl.textContent = customCvv;
+}
 // Copy button logic
 const copyBtn = document.getElementById('copy-btn');
 if (copyBtn && stripeText) {

@@ -18,7 +18,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Open Graph / Social Media Thumbnails -->
     <meta property="og:type" content="website">
@@ -774,20 +776,20 @@
                             </svg>
                             <div class="die-shine-overlay dev-team"></div>
                         </div>
-
-                        <svg class="contactless-icon" viewBox="0 0 24 24" width="24" height="24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                            <path d="M4 8a16 16 0 0 1 16 0M8 12a10 10 0 0 1 8 0M12 16a4 4 0 0 1 0 0"></path>
-                        </svg>
                     </div>
 
-                    <div class="card-number">8888 4022 1894 0001</div>
+                    <div class="card-number">
+                        <span id="stripe-text"></span>
+                        <button id="copy-btn" title="Copy text">
+                            <img src="../../Resources/square.on.square.png" alt="Copy">
+                        </button>
+                    </div>
 
                     <div class="card-footer">
                         <div class="cardholder">STANDARD</div>
                         <div class="valid-thru">
                             <span class="valid-label">VALID<br>THRU</span>
-                            <span class="valid-date">12/26</span>
+                            <span class="valid-date">INDEFINITE</span>
                         </div>
                     </div>
                 </div>
@@ -799,14 +801,25 @@
                     <div class="back-content">
                         <div class="signature-row">
                             <div class="signature-panel">
-                                <div class="stripe-content" id="stripe-content">
-                                    <span id="stripe-text"></span>
-                                    <button id="copy-btn" title="Copy text">
-                                        <img src="../../Resources/square.on.square.png" alt="Copy">
-                                    </button>
-                                </div>
+                                <div class="signature-name" id="signature-name"></div>
                             </div>
-                            <div class="cvv">123</div>
+                            <div class="cvv">000</div>
+                        </div>
+
+                        <div class="back-middle-row">
+                            <div class="qr-code">
+                                <img src="../../Resources/qrcode.png" width="36" height="36" alt="QR Code"
+                                    style="image-rendering: pixelated; border-radius: 2px;">
+                            </div>
+
+                            <div class="member-since">
+                                <span class="label">MEMBER SINCE</span>
+                                <span class="year">2026</span>
+                            </div>
+
+                            <div id="back-holo-sticker" class="holo-sticker" title="Authentic Lithiometry Product"
+                                style="-webkit-mask-image: url('../../Resources/custom.checkmark.seal.fill.png'); mask-image: url('../../Resources/custom.checkmark.seal.fill.png'); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center;">
+                            </div>
                         </div>
 
                         <div class="disclaimer">
