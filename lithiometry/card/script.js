@@ -217,6 +217,115 @@ const cvvEl = document.querySelector('.cvv');
 if (cvvEl && customCvv) {
     cvvEl.textContent = customCvv;
 }
+
+// Peel-off Seal logic
+const sealContainer = document.getElementById('seal-container');
+if (sealContainer) {
+    let isPeeling = false;
+    let peelStartX = 0;
+    let peelStartY = 0;
+    let peelDirection = null;
+    let currentPeelAmount = 0;
+    const PEEL_THRESHOLD = 0.65; // 65% to fully peel
+
+    sealContainer.addEventListener('pointerdown', (e) => {
+        if (sealContainer.classList.contains('is-peeled')) return;
+        
+        // Prevent card from rotating when peeling
+        e.stopPropagation();
+        
+        isPeeling = true;
+        peelStartX = e.clientX;
+        peelStartY = e.clientY;
+        peelDirection = null;
+        sealContainer.classList.add('is-dragging');
+        sealContainer.setPointerCapture(e.pointerId);
+    });
+
+    sealContainer.addEventListener('pointermove', (e) => {
+        if (!isPeeling) return;
+        e.stopPropagation();
+
+        const deltaX = e.clientX - peelStartX;
+        const deltaY = e.clientY - peelStartY;
+        
+        // Determine direction on first significant movement
+        if (!peelDirection && Math.abs(deltaX) > 2) {
+            peelDirection = deltaX > 0 ? 'right' : 'left';
+            if (peelDirection === 'right') {
+                sealContainer.classList.add('peel-from-left');
+                sealContainer.classList.remove('peel-from-right');
+            } else {
+                sealContainer.classList.add('peel-from-right');
+                sealContainer.classList.remove('peel-from-left');
+            }
+        }
+
+        if (peelDirection) {
+            // Prevent peeling in the opposite direction of the initial drag
+            if (peelDirection === 'right' && deltaX < 0) return;
+            if (peelDirection === 'left' && deltaX > 0) return;
+
+            // Calculate absolute peel amount
+            currentPeelAmount = Math.max(0, Math.abs(deltaX));
+            
+            // Limit to container width
+            const maxWidth = sealContainer.offsetWidth;
+            currentPeelAmount = Math.min(currentPeelAmount, maxWidth);
+            
+            // Calculate peel angle based on vertical drag
+            let angle = Math.atan2(deltaY, Math.max(10, Math.abs(deltaX))) * (180 / Math.PI);
+            // Clamp the angle to prevent it from breaking the illusion
+            angle = Math.max(-30, Math.min(30, angle));
+            
+            // Calculate horizontal skew offset for the clip-path cut line
+            const containerHalfHeight = sealContainer.offsetHeight / 2;
+            const skewOffset = containerHalfHeight * Math.tan(angle * Math.PI / 180);
+            
+            sealContainer.style.setProperty('--peel-amount', `${currentPeelAmount}px`);
+            sealContainer.style.setProperty('--peel-angle', `${angle}deg`);
+            sealContainer.style.setProperty('--peel-skew', `${skewOffset}px`);
+        }
+    });
+
+    const endPeel = (e) => {
+        if (!isPeeling) return;
+        e.stopPropagation();
+        isPeeling = false;
+        sealContainer.releasePointerCapture(e.pointerId);
+        sealContainer.classList.remove('is-dragging');
+
+        const maxWidth = sealContainer.offsetWidth;
+        
+        if (currentPeelAmount > maxWidth * PEEL_THRESHOLD) {
+            // Success! Peel fully off - fly straight to the edge of screen
+            sealContainer.classList.add('is-flying-off');
+            sealContainer.style.setProperty('--peel-amount', '1000px');
+            sealContainer.style.setProperty('--peel-angle', '0deg');
+            sealContainer.style.setProperty('--peel-skew', '0px');
+            
+            setTimeout(() => {
+                sealContainer.classList.add('is-peeled');
+                sealContainer.classList.remove('is-flying-off');
+            }, 300);
+        } else {
+            // Snap back
+            currentPeelAmount = 0;
+            sealContainer.style.setProperty('--peel-amount', '0px');
+            sealContainer.style.setProperty('--peel-angle', '0deg');
+            sealContainer.style.setProperty('--peel-skew', '0px');
+            setTimeout(() => {
+                if (!isPeeling) {
+                    sealContainer.classList.remove('peel-from-left', 'peel-from-right');
+                }
+            }, 300);
+        }
+    };
+
+    sealContainer.addEventListener('pointerup', endPeel);
+    sealContainer.addEventListener('pointercancel', endPeel);
+}
+
 // Copy button logic
 const copyBtn = document.getElementById('copy-btn');
 if (copyBtn && stripeText) {

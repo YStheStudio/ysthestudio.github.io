@@ -87,7 +87,6 @@ html {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     border-radius: 24px;
-    overflow: hidden;
 
     /* Prevent text and image selection */
     -webkit-user-select: none;
@@ -181,7 +180,7 @@ html {
     align-items: center;
     gap: 16px;
     margin-top: auto;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
     transform: 
         translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 15px))
         translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -15px));
@@ -203,9 +202,133 @@ html {
     display: flex;
     align-items: center;
     gap: 12px;
+    z-index: 10;
     transform: 
         translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 25px))
         translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -25px));
+}
+
+.seal-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    margin-left: -6px;
+    cursor: grab;
+    touch-action: none;
+    border-radius: 4px;
+}
+
+.seal-container:active {
+    cursor: grabbing;
+}
+
+.seal-container.is-peeled {
+    cursor: default;
+}
+
+.seal-front {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        #a0a0a0,
+        #a0a0a0 4px,
+        #b8b8b8 4px,
+        #b8b8b8 8px
+    );
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.8);
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: clip-path 0.3s ease;
+    border-radius: 2px;
+}
+
+.seal-hint {
+    font-family: sans-serif;
+    font-size: 0.5rem;
+    letter-spacing: 2px;
+    color: rgba(0,0,0,0.4);
+    white-space: nowrap;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+.seal-back {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    width: 0px;
+    background: linear-gradient(to right, #666, #444);
+    z-index: 10;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.6), inset 1px 0 2px rgba(255,255,255,0.4);
+    opacity: calc(min(var(--peel-amount, 0px) / 1px, 1));
+    transition: width 0.3s ease, left 0.3s ease, right 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+/* Peel from Left (drag right) */
+.seal-container.peel-from-left .seal-front {
+    left: 0;
+    right: 0;
+    width: 100%;
+    clip-path: polygon(
+        calc(var(--peel-amount, 0px) + var(--peel-skew, 0px)) 0%, 
+        100% 0%, 
+        100% 100%, 
+        calc(var(--peel-amount, 0px) - var(--peel-skew, 0px)) 100%
+    );
+}
+.seal-container.peel-from-left .seal-back {
+    left: var(--peel-amount, 0px);
+    width: var(--peel-amount, 0px);
+    border-radius: 2px 0 0 2px;
+    transform-origin: left center;
+    transform: rotate(var(--peel-angle, 0deg));
+}
+
+/* Peel from Right (drag left) */
+.seal-container.peel-from-right .seal-front {
+    left: 0;
+    right: 0;
+    width: 100%;
+    clip-path: polygon(
+        0% 0%, 
+        calc(100% - var(--peel-amount, 0px) - var(--peel-skew, 0px)) 0%, 
+        calc(100% - var(--peel-amount, 0px) + var(--peel-skew, 0px)) 100%, 
+        0% 100%
+    );
+}
+.seal-container.peel-from-right .seal-back {
+    right: var(--peel-amount, 0px);
+    width: var(--peel-amount, 0px);
+    border-radius: 0 2px 2px 0;
+    background: linear-gradient(to left, #666, #444);
+    box-shadow: 2px 0 6px rgba(0,0,0,0.6), inset -1px 0 2px rgba(255,255,255,0.4);
+    transform-origin: right center;
+    transform: rotate(calc(var(--peel-angle, 0deg) * -1));
+}
+
+/* Disable transitions during drag */
+.seal-container.is-dragging .seal-front,
+.seal-container.is-dragging .seal-back {
+    transition: none;
+}
+
+/* Fade out during fly off */
+.seal-container.is-flying-off .seal-back {
+    opacity: 0 !important;
+}
+
+/* Hide seal entirely when fully peeled */
+.seal-container.is-peeled .seal-front,
+.seal-container.is-peeled .seal-back {
+    display: none;
 }
 
 .card-footer {
@@ -400,9 +523,14 @@ html {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, background 0.2s ease, transform 0.1s ease;
+}
+
+.seal-container.is-peeled ~ #copy-btn {
     opacity: 1;
     pointer-events: auto;
-    transition: opacity 0.3s ease, background 0.2s ease, transform 0.1s ease;
 }
 
 #copy-btn img {
