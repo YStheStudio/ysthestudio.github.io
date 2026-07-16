@@ -323,13 +323,13 @@ html {
 .seal-container.is-flying-off.peel-from-left .seal-back {
     left: var(--locked-peel) !important;
     width: var(--locked-peel) !important;
-    transform: rotate(var(--peel-angle, 0deg)) translateX(1000px) !important;
+    transform: rotate(var(--peel-angle, 0deg)) translateX(50vw) !important;
 }
 
 .seal-container.is-flying-off.peel-from-right .seal-back {
     right: var(--locked-peel) !important;
     width: var(--locked-peel) !important;
-    transform: rotate(calc(var(--peel-angle, 0deg) * -1)) translateX(-1000px) !important;
+    transform: rotate(calc(var(--peel-angle, 0deg) * -1)) translateX(-50vw) !important;
 }
 
 /* Hide seal entirely when fully peeled */

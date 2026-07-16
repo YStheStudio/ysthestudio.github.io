@@ -301,7 +301,7 @@ if (sealContainer) {
             // Success! Peel fully off - fly straight to the edge of screen along its current angle
             sealContainer.classList.add('is-flying-off');
             sealContainer.style.setProperty('--locked-peel', `${currentPeelAmount}px`);
-            sealContainer.style.setProperty('--peel-amount', '1000px'); // This makes seal-front vanish
+            sealContainer.style.setProperty('--peel-amount', '50vw'); // This makes seal-front vanish
             // Do not zero out peel-angle or skew!
 
             setTimeout(() => {
