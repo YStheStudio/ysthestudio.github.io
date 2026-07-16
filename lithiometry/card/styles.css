@@ -154,15 +154,16 @@ html {
 /* Front Face Elements */
 .card-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
     user-select: none;
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 10px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -10px));
+    transform:
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 10px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -10px));
 }
 
 .bank-name {
+    font-family: sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.9);
@@ -181,9 +182,9 @@ html {
     gap: 16px;
     margin-top: auto;
     margin-bottom: 24px;
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 15px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -15px));
+    justify-content: flex-end;
+    transform:
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 15px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -15px));
 }
 
 .seal-icon {
@@ -192,20 +193,18 @@ html {
 }
 
 .card-number {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: sans-serif;
     font-size: 1.6rem;
     letter-spacing: 3px;
     color: #e0e0e0;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
     margin-bottom: 24px;
     user-select: none;
     display: flex;
     align-items: center;
     gap: 12px;
     z-index: 10;
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 25px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -25px));
+    transform:
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 25px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -25px));
 }
 
 .seal-container {
@@ -233,14 +232,12 @@ html {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        #a0a0a0,
-        #a0a0a0 4px,
-        #b8b8b8 4px,
-        #b8b8b8 8px
-    );
-    box-shadow: inset 0 1px 3px rgba(255,255,255,0.8);
+    background: repeating-linear-gradient(45deg,
+            #a0a0a0,
+            #a0a0a0 4px,
+            #b8b8b8 4px,
+            #b8b8b8 8px);
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8);
     z-index: 2;
     overflow: hidden;
     display: flex;
@@ -254,9 +251,9 @@ html {
     font-family: sans-serif;
     font-size: 0.5rem;
     letter-spacing: 2px;
-    color: rgba(0,0,0,0.4);
+    color: rgba(0, 0, 0, 0.4);
     white-space: nowrap;
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .seal-back {
@@ -266,7 +263,7 @@ html {
     width: 0px;
     background: linear-gradient(to right, #666, #444);
     z-index: 10;
-    box-shadow: -2px 0 6px rgba(0,0,0,0.6), inset 1px 0 2px rgba(255,255,255,0.4);
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.6), inset 1px 0 2px rgba(255, 255, 255, 0.4);
     opacity: 1;
     transition: width 0.3s ease, left 0.3s ease, right 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
@@ -277,13 +274,12 @@ html {
     left: 0;
     right: 0;
     width: 100%;
-    clip-path: polygon(
-        calc(var(--peel-amount, 0px) + var(--peel-skew, 0px)) 0%, 
-        100% 0%, 
-        100% 100%, 
-        calc(var(--peel-amount, 0px) - var(--peel-skew, 0px)) 100%
-    );
+    clip-path: polygon(calc(var(--peel-amount, 0px) + var(--peel-skew, 0px)) 0%,
+            100% 0%,
+            100% 100%,
+            calc(var(--peel-amount, 0px) - var(--peel-skew, 0px)) 100%);
 }
+
 .seal-container.peel-from-left .seal-back {
     left: var(--peel-amount, 0px);
     width: var(--peel-amount, 0px);
@@ -297,19 +293,18 @@ html {
     left: 0;
     right: 0;
     width: 100%;
-    clip-path: polygon(
-        0% 0%, 
-        calc(100% - var(--peel-amount, 0px) - var(--peel-skew, 0px)) 0%, 
-        calc(100% - var(--peel-amount, 0px) + var(--peel-skew, 0px)) 100%, 
-        0% 100%
-    );
+    clip-path: polygon(0% 0%,
+            calc(100% - var(--peel-amount, 0px) - var(--peel-skew, 0px)) 0%,
+            calc(100% - var(--peel-amount, 0px) + var(--peel-skew, 0px)) 100%,
+            0% 100%);
 }
+
 .seal-container.peel-from-right .seal-back {
     right: var(--peel-amount, 0px);
     width: var(--peel-amount, 0px);
     border-radius: 0 2px 2px 0;
     background: linear-gradient(to left, #666, #444);
-    box-shadow: 2px 0 6px rgba(0,0,0,0.6), inset -1px 0 2px rgba(255,255,255,0.4);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.6), inset -1px 0 2px rgba(255, 255, 255, 0.4);
     transform-origin: right center;
     transform: rotate(calc(var(--peel-angle, 0deg) * -1));
 }
@@ -348,9 +343,8 @@ html {
     justify-content: space-between;
     align-items: flex-end;
     user-select: none;
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 20px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -20px));
+    transform:
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 20px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -20px));
 }
 
 .cardholder {
@@ -364,9 +358,8 @@ html {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: sans-serif;
     color: #e0e0e0;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.2);
 }
 
 .valid-label {
@@ -392,7 +385,7 @@ html {
     right: 0;
     height: 48px;
     background: #111;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .back-content {
@@ -402,9 +395,8 @@ html {
     justify-content: space-between;
     height: 100%;
     box-sizing: border-box;
-    transform: 
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -10px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 10px));
+    transform:
+        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -10px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 10px));
 }
 
 .signature-row {
@@ -422,7 +414,7 @@ html {
     align-items: center;
     justify-content: center;
     position: relative;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cvv {
@@ -430,12 +422,13 @@ html {
     font-size: 1.1rem;
     font-style: italic;
     color: #fff;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     padding: 4px 8px;
     border-radius: 4px;
 }
 
 .disclaimer {
+    font-family: sans-serif;
     font-size: 0.65rem;
     color: rgba(255, 255, 255, 0.5);
     line-height: 1.4;
@@ -451,7 +444,7 @@ html {
 }
 
 .qr-code {
-    background: rgba(255,255,255,0.9);
+    background: rgba(255, 255, 255, 0.9);
     padding: 6px;
     border-radius: 4px;
     display: flex;
@@ -482,17 +475,15 @@ html {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: repeating-linear-gradient(
-        135deg,
-        rgba(255,0,0,0.4) calc(0% + var(--shine-offset, 0%)),
-        rgba(255,255,0,0.4) calc(16.66% + var(--shine-offset, 0%)),
-        rgba(0,255,0,0.4) calc(33.33% + var(--shine-offset, 0%)),
-        rgba(0,255,255,0.4) calc(50% + var(--shine-offset, 0%)),
-        rgba(0,0,255,0.4) calc(66.66% + var(--shine-offset, 0%)),
-        rgba(255,0,255,0.4) calc(83.33% + var(--shine-offset, 0%)),
-        rgba(255,0,0,0.4) calc(100% + var(--shine-offset, 0%))
-    );
-    box-shadow: inset 0 0 6px rgba(255,255,255,0.6), 0 2px 4px rgba(0,0,0,0.3);
+    background: repeating-linear-gradient(135deg,
+            rgba(255, 0, 0, 0.4) calc(0% + var(--shine-offset, 0%)),
+            rgba(255, 255, 0, 0.4) calc(16.66% + var(--shine-offset, 0%)),
+            rgba(0, 255, 0, 0.4) calc(33.33% + var(--shine-offset, 0%)),
+            rgba(0, 255, 255, 0.4) calc(50% + var(--shine-offset, 0%)),
+            rgba(0, 0, 255, 0.4) calc(66.66% + var(--shine-offset, 0%)),
+            rgba(255, 0, 255, 0.4) calc(83.33% + var(--shine-offset, 0%)),
+            rgba(255, 0, 0, 0.4) calc(100% + var(--shine-offset, 0%)));
+    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
     /* Static metallic base under the rainbow */
@@ -503,7 +494,7 @@ html {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at calc(50% + var(--anim-ry, 0) * -1.5%) calc(50% + var(--anim-rx, 0) * -1.5%), rgba(255,255,255,0.9) 0%, transparent 60%);
+    background: radial-gradient(circle at calc(50% + var(--anim-ry, 0) * -1.5%) calc(50% + var(--anim-rx, 0) * -1.5%), rgba(255, 255, 255, 0.9) 0%, transparent 60%);
     mix-blend-mode: overlay;
     border-radius: inherit;
 }
@@ -540,7 +531,7 @@ html {
     transition: opacity 0.4s ease, background 0.2s ease, transform 0.1s ease;
 }
 
-.seal-container.is-peeled ~ #copy-btn {
+.seal-container.is-peeled~#copy-btn {
     opacity: 1;
     pointer-events: auto;
 }
@@ -577,15 +568,13 @@ html {
 }
 
 .card-front .drag-hint {
-    transform: 
-        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 5px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -5px));
+    transform:
+        translateX(calc(sin(calc(var(--ry, 0) * 1deg)) * 5px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * -5px));
 }
 
 .card-back .drag-hint {
-    transform: 
-        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -5px))
-        translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 5px));
+    transform:
+        translateX(calc(sin(calc((var(--ry, 180) - 180) * 1deg)) * -5px)) translateY(calc(sin(calc(var(--rx, 0) * 1deg)) * 5px));
 }
 
 .drag-hint::before,
@@ -662,14 +651,13 @@ html {
     pointer-events: none;
     z-index: 2;
     background: repeating-linear-gradient(115deg,
-        rgba(255, 0, 0, 0.3) calc(0% + var(--shine-offset, 0%)),
-        rgba(255, 255, 0, 0.3) calc(16.66% + var(--shine-offset, 0%)),
-        rgba(0, 255, 0, 0.3) calc(33.33% + var(--shine-offset, 0%)),
-        rgba(0, 255, 255, 0.3) calc(50% + var(--shine-offset, 0%)),
-        rgba(0, 0, 255, 0.3) calc(66.66% + var(--shine-offset, 0%)),
-        rgba(255, 0, 255, 0.3) calc(83.33% + var(--shine-offset, 0%)),
-        rgba(255, 0, 0, 0.3) calc(100% + var(--shine-offset, 0%))
-    );
+            rgba(255, 0, 0, 0.3) calc(0% + var(--shine-offset, 0%)),
+            rgba(255, 255, 0, 0.3) calc(16.66% + var(--shine-offset, 0%)),
+            rgba(0, 255, 0, 0.3) calc(33.33% + var(--shine-offset, 0%)),
+            rgba(0, 255, 255, 0.3) calc(50% + var(--shine-offset, 0%)),
+            rgba(0, 0, 255, 0.3) calc(66.66% + var(--shine-offset, 0%)),
+            rgba(255, 0, 255, 0.3) calc(83.33% + var(--shine-offset, 0%)),
+            rgba(255, 0, 0, 0.3) calc(100% + var(--shine-offset, 0%)));
 }
 
 /* Early Supporter Variant Styles */
@@ -724,12 +712,12 @@ html {
     .bank-name {
         font-size: 0.9rem;
     }
-    
+
     .card-number {
         font-size: 1.2rem;
         letter-spacing: 1.5px;
     }
-    
+
     .cardholder {
         font-size: 0.9rem;
     }
@@ -737,7 +725,7 @@ html {
     .back-content {
         padding: 80px 20px 20px;
     }
-    
+
     .magnetic-stripe {
         top: 24px;
         height: 36px;
