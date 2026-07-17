@@ -579,8 +579,8 @@ function generateMagneticStripe() {
     linesDiv.style.background = `
         linear-gradient(105deg, 
             transparent 20%, 
-            rgba(255, 255, 255, 0.3) 25%, 
-            rgba(255, 255, 255, 0.4) 30%, 
+            rgba(255, 255, 255, 0.1) 25%, 
+            rgba(255, 255, 255, 0.2) 30%, 
             transparent 50%
         ),
         rgba(255, 255, 255, 0.0)
