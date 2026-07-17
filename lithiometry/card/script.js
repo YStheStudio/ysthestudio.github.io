@@ -267,7 +267,7 @@ if (sealContainer) {
     let peelStartY = 0;
     let peelDirection = null;
     let currentPeelAmount = 0;
-    const PEEL_THRESHOLD = 0.65; // 65% to fully peel
+    const PEEL_THRESHOLD = 0.40; // 40% to fully peel
 
     sealContainer.addEventListener('pointerdown', (e) => {
         if (sealContainer.classList.contains('is-peeled')) return;
