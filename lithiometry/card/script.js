@@ -205,7 +205,7 @@ const memberSinceDateEl = document.getElementById('member-since-date');
 if (customDate) {
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-    // Parse new format: MMDDHHMMSSYYYY or MDDHHMMSSYYYY (e.g. 4101230592026 -> APR 10 12:30:59 PDT 2026)
+    // Parse new format: MMDDHHMMSSYYYY or MDDHHMMSSYYYY (e.g. 4101230592026 -> APR 10 12:30:59 GMT 2026)
     if (customDate.length === 13 || customDate.length === 14) {
         const year = parseInt(customDate.slice(-4), 10);
         const seconds = parseInt(customDate.slice(-6, -4), 10);
@@ -215,7 +215,7 @@ if (customDate) {
         const monthNum = parseInt(customDate.slice(0, -12), 10);
 
         if (monthNum >= 1 && monthNum <= 12) {
-            const memberSinceStr = `${months[monthNum - 1]} ${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} PDT ${year}`;
+            const memberSinceStr = `${months[monthNum - 1]} ${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} GMT ${year}`;
 
             if (memberSinceDateEl) {
                 memberSinceDateEl.style.fontSize = '1rem';
@@ -237,7 +237,7 @@ if (customDate) {
 
                 validDateEl.style.fontSize = '0.65rem';
                 validDateEl.style.letterSpacing = '0.3px';
-                validDateEl.textContent = `${vMonth} ${vDay} ${vHours}:${vMinutes}:${vSeconds} PDT ${vYear}`;
+                validDateEl.textContent = `${vMonth} ${vDay} ${vHours}:${vMinutes}:${vSeconds} GMT ${vYear}`;
             }
         }
     }
