@@ -583,7 +583,7 @@ function generateMagneticStripe() {
             rgba(255, 255, 255, 0.4) 30%, 
             transparent 50%
         ),
-        rgba(255, 255, 255, 0.15)
+        rgba(255, 255, 255, 0.0)
     `;
     linesDiv.style.backgroundSize = '250% 250%, 100% 100%';
     // Sync the glare position exactly with the card's smooth animated tilt engine
