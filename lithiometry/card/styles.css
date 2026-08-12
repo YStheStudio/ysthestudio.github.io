@@ -476,11 +476,67 @@ html {
 }
 
 .qr-code {
+    position: relative;
     background: rgba(255, 255, 255, 0.9);
     padding: 6px;
     border-radius: 4px;
     display: flex;
 }
+
+.qr-code::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid #fecf0a;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    /* Isolate the 4 corners (25% length) using mask intersections */
+    -webkit-mask:
+        linear-gradient(to right, #000 25%, transparent 25%, transparent 75%, #000 75%),
+        linear-gradient(to bottom, #000 25%, transparent 25%, transparent 75%, #000 75%);
+    -webkit-mask-composite: source-in;
+    
+    mask:
+        linear-gradient(to right, #000 25%, transparent 25%, transparent 75%, #000 75%),
+        linear-gradient(to bottom, #000 25%, transparent 25%, transparent 75%, #000 75%);
+    mask-composite: intersect;
+}
+
+.card.is-resting-back:not(.is-dismissed) .qr-code::before {
+    opacity: 1;
+}
+
+.redeem-pill {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fecf0a;
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.card.is-resting-back:not(.is-dismissed) .redeem-pill {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
 
 .member-since {
     display: flex;
@@ -766,4 +822,63 @@ html {
     .signature-panel {
         height: 36px;
     }
+}
+
+/* Compatibility Mode Toggle */
+.compatibility-toggle {
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-family: sans-serif;
+    font-size: 0.75rem;
+    color: #000;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    z-index: 100;
+    user-select: none;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.compatibility-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ios-switch {
+    width: 36px;
+    height: 20px;
+    background: #9E9E9E;
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.3s ease;
+    margin-left: 4px;
+}
+
+.ios-knob {
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.compatibility-toggle.is-active .ios-switch {
+    background: #0091FF;
+}
+
+.compatibility-toggle.is-active .ios-knob {
+    transform: translateX(16px);
 }

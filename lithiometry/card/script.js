@@ -5,6 +5,7 @@ let startX = 0;
 let lastDeltaX = 0;
 let currentRotationY = 0; // The actual accumulated rotation
 let isFlipped = false;
+let isCompatibilityMode = false;
 let velocity = 0;
 let lastTimestamp = 0;
 let isAnimating = false; // Track CSS transition state
@@ -17,6 +18,20 @@ let animRy = 0;
 let animRx = 0;
 
 card.addEventListener('pointerdown', (e) => {
+    if (isCompatibilityMode) {
+        currentRotationY += 180;
+        isFlipped = !isFlipped;
+
+        card.classList.add('is-animating');
+        card.classList.remove('is-resting-back');
+        card.classList.remove('is-dismissed');
+
+        card.style.transform = `rotateX(0deg) rotateY(${currentRotationY}deg)`;
+        card.style.setProperty('--ry', currentRotationY);
+        card.style.setProperty('--rx', 0);
+        return;
+    }
+
     isDragging = true;
     startX = e.clientX;
     lastDeltaX = 0;
@@ -26,6 +41,7 @@ card.addEventListener('pointerdown', (e) => {
 
     card.classList.remove('is-animating');
     card.classList.remove('is-resting-back');
+    card.classList.remove('is-dismissed');
     card.classList.add('is-dragging');
     card.setPointerCapture(e.pointerId);
 });
@@ -275,6 +291,13 @@ if (sealContainer) {
         // Prevent card from rotating when peeling
         e.stopPropagation();
 
+        if (isCompatibilityMode) {
+            sealContainer.classList.add('peel-from-right');
+            sealContainer.style.setProperty('--peel-amount', 1);
+            sealContainer.classList.add('is-peeled');
+            return;
+        }
+
         isPeeling = true;
         peelStartX = e.clientX;
         peelStartY = e.clientY;
@@ -402,6 +425,20 @@ const redeemLink = document.getElementById('redeem-link');
 if (redeemLink) {
     redeemLink.addEventListener('pointerdown', (e) => {
         e.stopPropagation();
+    });
+}
+
+// Handle dismiss pill click
+const dismissPill = document.getElementById('dismiss-pill');
+if (dismissPill) {
+    dismissPill.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+    });
+
+    dismissPill.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        card.classList.add('is-dismissed');
     });
 }
 
@@ -599,3 +636,26 @@ function generateMagneticStripe() {
 }
 
 generateMagneticStripe();
+
+// Compatibility Mode Toggle Logic
+const compToggle = document.getElementById('compatibility-toggle');
+if (compToggle) {
+    compToggle.addEventListener('pointerdown', (e) => e.stopPropagation());
+
+    compToggle.addEventListener('click', (e) => {
+        isCompatibilityMode = !isCompatibilityMode;
+
+        const flipHints = document.querySelectorAll('.flip-hint');
+        const sealHints = document.querySelectorAll('.seal-hint');
+
+        if (isCompatibilityMode) {
+            compToggle.classList.add('is-active');
+            flipHints.forEach(hint => hint.textContent = 'CLICK TO FLIP');
+            sealHints.forEach(hint => hint.textContent = 'CLICK TO REVEAL');
+        } else {
+            compToggle.classList.remove('is-active');
+            flipHints.forEach(hint => hint.textContent = 'DRAG TO FLIP');
+            sealHints.forEach(hint => hint.textContent = 'PEEL TO REVEAL');
+        }
+    });
+}
