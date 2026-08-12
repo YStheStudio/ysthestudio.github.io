@@ -18,6 +18,8 @@ let animRy = 0;
 let animRx = 0;
 
 card.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('a')) return;
+    
     if (isCompatibilityMode) {
         currentRotationY += 180;
         isFlipped = !isFlipped;
@@ -420,13 +422,7 @@ if (copyBtn && stripeText) {
     });
 }
 
-// Prevent link clicks from dragging the card
-const redeemLink = document.getElementById('redeem-link');
-if (redeemLink) {
-    redeemLink.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-    });
-}
+
 
 // Handle dismiss pill click
 const dismissPill = document.getElementById('dismiss-pill');
